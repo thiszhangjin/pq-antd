@@ -1,3 +1,4 @@
+<<<<<<< .mine
 # myAntd
 
 ## Getting Started
@@ -25,3 +26,32 @@ Build library via `father-build`,
 ```bash
 $ npm run build
 ```
+=======
+# myAntd
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> .theirs
