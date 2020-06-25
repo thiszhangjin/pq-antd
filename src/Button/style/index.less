@@ -1,0 +1,115 @@
+@import '../../style/default.less';
+
+@button-cls: ~'@{prefix}-button';
+@button-height-normal: 32px;
+@button-width-normal: 78px;
+
+.colored-buttons(@color, @hover-color) {
+  background: @color;
+  border-color: @color;
+  color: #fff;
+  &:hover,
+  &:focus {
+    background: @hover-color;
+    border-color: @hover-color;
+  }
+  .anticon {
+    svg {
+      fill: #fff;
+    }
+  }
+}
+
+.@{button-cls} {
+  line-height: 1.499;
+  position: relative;
+  display: inline-block;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
+  background-image: none;
+  border: 1px solid #d9d9d9;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  user-select: none;
+  touch-action: manipulation;
+  height: @button-height-normal;
+  min-width: @button-width-normal;
+  line-height: @button-height-normal;
+  padding: 0 15px;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+  margin: 4px;
+  font-size: @font-size;
+  .anticon {
+    svg {
+      fill: @color;
+    }
+
+    & + span {
+      margin-left: 8px;
+    }
+  }
+
+  &:hover,
+  &:focus {
+    border-color: @color-primary;
+  }
+
+  &[disabled],
+  &[disabled]:hover,
+  &[disabled]:focus {
+    color: rgba(0, 0, 0, 0.25);
+    background-color: #f5f5f5;
+    border-color: #d9d9d9;
+    text-shadow: none;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  &-dashed {
+    border: 1px dashed #d9d9d9;
+  }
+
+  &-primary {
+    .colored-buttons(@color-primary, @color-primary-hover);
+  }
+
+  &-danger {
+    .colored-buttons(@color-danger, @color-danger-hover);
+  }
+
+  &-circle {
+    min-width: @button-height-normal;
+    border-radius: 50%;
+    padding: 0;
+  }
+
+  &-round {
+    min-width: @button-height-normal;
+    border-radius: @button-height-normal;
+    padding: 0 16px;
+  }
+
+  &-only-icon {
+    min-width: @button-height-normal;
+  }
+}
+
+.@{button-cls}-group {
+  border-radius: 4px;
+  display: inline-flex;
+  overflow: hidden;
+  margin: 4px;
+  .@{button-cls} {
+    margin: 0px;
+    padding: 0 15px;
+    border-radius: 0px;
+
+    &:not(:last-child) {
+      border-right-color: #40a9ff;
+    }
+  }
+}
