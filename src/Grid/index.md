@@ -603,7 +603,17 @@ export default () => (
       >
         col-4
       </Col>
-      <Col span={4}>col-4</Col>
+      <Col
+        span={4}
+        style={{
+          height: '40px',
+          lineHeight: '40px',
+          color: '#fff',
+          background: 'rgba(0,160,233,.7)',
+        }}
+      >
+        col-4
+      </Col>
     </Row>
   </div>
 );
