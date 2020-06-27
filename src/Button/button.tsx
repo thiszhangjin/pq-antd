@@ -53,15 +53,20 @@ export default class Button extends React.Component<IProps, IState> {
       shape,
       loading,
       icon,
+      className,
       children,
       ...orthers
     } = this.props;
-    const classes = classNames(prefixCls, {
-      [`${prefixCls}-${type}`]: type,
-      [`${prefixCls}-${shape}`]: shape,
-      [`${prefixCls}-only-icon`]: icon && !children,
-      [`${prefixCls}-loading`]: !!loading,
-    });
+    const classes = classNames(
+      prefixCls,
+      {
+        [`${prefixCls}-${type}`]: type,
+        [`${prefixCls}-${shape}`]: shape,
+        [`${prefixCls}-only-icon`]: icon && !children,
+        [`${prefixCls}-loading`]: !!loading,
+      },
+      className,
+    );
 
     return (
       <button
