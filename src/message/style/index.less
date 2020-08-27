@@ -1,0 +1,25 @@
+@import '../../style/default.less';
+
+@row-pagination: ~'@{prefix}-pagination';
+
+.@{row-pagination} {
+  list-style: none;
+
+  &-item,
+  &-prev,
+  &-next {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border: 1px solid @color-border-normal;
+    border-radius: 4px;
+    margin-right: 8px;
+    line-height: 32px;
+    text-align: center;
+    user-select: none;
+  }
+
+  &-item-active {
+    border-color: @color-primary;
+  }
+}
