@@ -1,29 +1,25 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Icon } from 'antd';
 
-interface IProps {
+export interface NoticeProps {
   prefixCls: string;
   style?: React.CSSProperties;
   className?: string;
   duration?: number | null;
   children?: React.ReactNode;
-  update?: boolean;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   onClose?: () => void;
 }
 interface IState {
-  prefixCls: string;
 }
 
-export default class Notice extends React.Component<IProps, IState> {
+export default class Notice extends React.Component<NoticeProps, IState> {
   public timer: number | null = null;
   public duration: number = this.props.duration || 3;
   public readonly state: Readonly<IState> = {
-    prefixCls: 'myantd',
   };
 
-  public constructor(props: IProps) {
+  public constructor(props: NoticeProps) {
     super(props);
   }
 
@@ -49,13 +45,12 @@ export default class Notice extends React.Component<IProps, IState> {
     if (onClose) {
       onClose();
     }
-    console.log('close');
   };
 
   render(): React.ReactNode {
     const childeNode = (
       <p style={{ height: '20px', lineHeight: '20px', margin: 0 }}>
-        烦恼多年的头发
+        雾气 散开 光透出来
       </p>
     );
     const {
@@ -78,6 +73,10 @@ export default class Notice extends React.Component<IProps, IState> {
           background: '#fff',
           borderRadius: '4px',
           boxShadow: '0 4px 12px rgba(0,0,0,.15)',
+          position: 'fixed',
+          zIndex: 9999,
+          left: '50%',
+          top: 100
         }}
       >
         <div className={`${prefixCls}-notice-conetnt`}>{children}</div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import Notice from './core/notice';
+import Notification from './core/Notification';
 
 interface IProps {}
 interface IState {
@@ -19,7 +19,7 @@ export default class Message extends React.Component<IProps, IState> {
   render() {
     return (
       <div>
-        <Notice />
+        <Notification prefixCls="myAntd"/>
       </div>
     );
   }

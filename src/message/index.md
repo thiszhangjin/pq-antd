@@ -4,11 +4,21 @@
 
 ```tsx
 import React from 'react';
-import { Message } from 'myAntd';
+import { Button } from 'myAntd';
+import Notification from './core/Notification';
+
+let notification = null;
+Notification.newInstance((Notification) => {
+  notification = Notification;
+});
+
+function messageExaple(){
+  notification.add({});
+}
 
 export default () => (
   <div>
-    <Message />
+    <Button type="primary" onClick={messageExaple}>message</Button>
   </div>
 );
 ```
