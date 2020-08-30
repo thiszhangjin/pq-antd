@@ -8,17 +8,21 @@ import { Button } from 'myAntd';
 import Notification from './core/Notification';
 
 let notification = null;
-Notification.newInstance((Notification) => {
+Notification.newInstance(Notification => {
   notification = Notification;
 });
 
-function messageExaple(){
-  notification.add({});
+function messageExaple() {
+  notification.add({
+    content: '谁看江上明月 谁听江风浩荡',
+  });
 }
 
 export default () => (
   <div>
-    <Button type="primary" onClick={messageExaple}>message</Button>
+    <Button type="primary" onClick={messageExaple}>
+      message
+    </Button>
   </div>
 );
 ```

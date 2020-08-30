@@ -3,23 +3,24 @@
 @row-pagination: ~'@{prefix}-pagination';
 
 .@{row-pagination} {
-  list-style: none;
+}
 
-  &-item,
-  &-prev,
-  &-next {
-    display: inline-block;
-    width: 32px;
-    height: 32px;
-    border: 1px solid @color-border-normal;
-    border-radius: 4px;
-    margin-right: 8px;
-    line-height: 32px;
-    text-align: center;
-    user-select: none;
+.move-up-leave,
+.move-up-leave-active {
+  overflow: hidden;
+  animation-name: MessageMoveOut;
+  animation-duration: 0.3s;
+}
+
+@keyframes MessageMoveOut {
+  0% {
+    max-height: 150px;
+    padding: 8px;
+    opacity: 1;
   }
-
-  &-item-active {
-    border-color: @color-primary;
+  100% {
+    max-height: 0;
+    padding: 0;
+    opacity: 0;
   }
 }

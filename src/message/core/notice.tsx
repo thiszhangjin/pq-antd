@@ -10,14 +10,12 @@ export interface NoticeProps {
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   onClose?: () => void;
 }
-interface IState {
-}
+interface IState {}
 
 export default class Notice extends React.Component<NoticeProps, IState> {
   public timer: number | null = null;
   public duration: number = this.props.duration || 3;
-  public readonly state: Readonly<IState> = {
-  };
+  public readonly state: Readonly<IState> = {};
 
   public constructor(props: NoticeProps) {
     super(props);
@@ -48,18 +46,7 @@ export default class Notice extends React.Component<NoticeProps, IState> {
   };
 
   render(): React.ReactNode {
-    const childeNode = (
-      <p style={{ height: '20px', lineHeight: '20px', margin: 0 }}>
-        雾气 散开 光透出来
-      </p>
-    );
-    const {
-      prefixCls,
-      style,
-      className,
-      children = childeNode,
-      ...others
-    } = this.props;
+    const { prefixCls, style, className, children, ...others } = this.props;
     const classes = classNames(`${prefixCls}-notice`, className);
     return (
       <div
@@ -76,7 +63,7 @@ export default class Notice extends React.Component<NoticeProps, IState> {
           position: 'fixed',
           zIndex: 9999,
           left: '50%',
-          top: 100
+          top: 100,
         }}
       >
         <div className={`${prefixCls}-notice-conetnt`}>{children}</div>
