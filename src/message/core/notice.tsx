@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 export interface NoticeProps {
-  prefixCls: string;
+  prefixCls?: string;
   style?: React.CSSProperties;
   className?: string;
   duration?: number | null;
@@ -19,6 +19,17 @@ export default class Notice extends React.Component<NoticeProps, IState> {
 
   public constructor(props: NoticeProps) {
     super(props);
+  }
+
+  static defaultProps = {
+    style: {
+      width: 'max-content',
+      padding: '10px 16px',
+      margin: '10px 0',
+      background: '#fff',
+      borderRadius: '4px',
+      boxShadow: '0 4px 12px rgba(0,0,0,.15)',
+    }
   }
 
   componentDidMount() {
@@ -51,20 +62,10 @@ export default class Notice extends React.Component<NoticeProps, IState> {
     return (
       <div
         className={classes}
-        {...others}
         onMouseMove={this.resetCloseTimer}
         onMouseOut={this.startCloseTimer}
-        style={{
-          width: 'max-content',
-          padding: '10px 16px',
-          background: '#fff',
-          borderRadius: '4px',
-          boxShadow: '0 4px 12px rgba(0,0,0,.15)',
-          position: 'fixed',
-          zIndex: 9999,
-          left: '50%',
-          top: 100,
-        }}
+        style={style}
+        {...others}
       >
         <div className={`${prefixCls}-notice-conetnt`}>{children}</div>
       </div>

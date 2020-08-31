@@ -30,6 +30,15 @@ export default class Notification extends React.Component<
     super(props);
   }
 
+  static defaultProps = {
+    prefixCls: "myAntd",
+    style:{
+      position: 'fixed',
+      left: '50%',
+      top: '100px'
+    }
+  }
+
   add = (noticeData: noticeDataProps) => {
     const { NoticeList } = this.state;
     noticeData.key = new Date().getTime();
@@ -46,18 +55,24 @@ export default class Notification extends React.Component<
   };
 
   render(): React.ReactNode {
-    const props: NoticeProps = {
-      prefixCls: this.props.prefixCls,
-    };
+    const {prefixCls, style} = this.props;
     const { NoticeList } = this.state;
     let renderNode = NoticeList.map(item => {
-      props.onClose = () => {
-        this.delete(item.key);
-      };
-      props.children = item.content;
-      return <Notice {...props} key={item.key} />;
+      const noticeProps:NoticeProps = {
+        prefixCls,
+        ...item,
+        onClose: () => {
+          this.delete(item.key);
+        },
+        children: item.content
+      }
+      return <Notice {...noticeProps} key={item.key} />;
     });
-    return <Animate transitionName="move-up">{renderNode}</Animate>;
+    return (
+      <div className={`${prefixCls}-notification`} style={style} >
+        <Animate transitionName="fade">{renderNode}</Animate>
+      </div>
+    )
   }
 }
 

@@ -15,6 +15,7 @@ Notification.newInstance(Notification => {
 function messageExaple() {
   notification.add({
     content: '谁看江上明月 谁听江风浩荡',
+    duration: 10
   });
 }
 
