@@ -2,25 +2,13 @@ import React from 'react';
 import classNames from 'classnames';
 import Notification from './core/Notification';
 
-interface IProps {}
-interface IState {
-  prefixCls: string;
-}
+let messageInstance = null;
+Notification.newInstance((instance: any) => {
+  messageInstance = instance;
+});
 
-export default class Message extends React.Component<IProps, IState> {
-  public readonly state: Readonly<IState> = {
-    prefixCls: 'myantd',
-  };
+type types = "success" | "error" | "info" | "warning" | "loading"
 
-  public constructor(props: IProps) {
-    super(props);
-  }
+// interface
 
-  render() {
-    return (
-      <div>
-        <Notification prefixCls="myAntd"/>
-      </div>
-    );
-  }
-}
+export default messageInstance

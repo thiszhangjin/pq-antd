@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import Notice, { NoticeProps } from './Notice';
 import Animate from 'rc-animate';
@@ -10,7 +10,7 @@ interface NotificationProps {
 
 interface noticeDataProps extends NoticeProps {
   key: number;
-  content: string;
+  content: string|ReactNode;
 }
 
 interface IState {
