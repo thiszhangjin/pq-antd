@@ -1,8 +1,26 @@
 @import '../../style/default.less';
 
-@row-pagination: ~'@{prefix}-pagination';
+@message: ~'@{prefix}-message';
 
-.@{row-pagination} {
+.message-type(@color) {
+  color: @color;
+  font-size: 16px;
+  margin-right: 2px;
+}
+
+.@{message} {
+  &-success i {
+    .message-type(@color-primary);
+  }
+  &-error i {
+    .message-type(@color-danger);
+  }
+  &-info i {
+    .message-type(@color-primary);
+  }
+  &-warning i {
+    .message-type(@color-warning);
+  }
 }
 
 .fade-effect() {
