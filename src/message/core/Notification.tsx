@@ -10,7 +10,7 @@ interface NotificationProps {
 
 interface noticeDataProps extends NoticeProps {
   key: number;
-  content: string|ReactNode;
+  content: string | ReactNode;
 }
 
 interface IState {
@@ -31,13 +31,14 @@ export default class Notification extends React.Component<
   }
 
   static defaultProps = {
-    prefixCls: "myAntd",
-    style:{
+    prefixCls: 'myantd',
+    style: {
       position: 'fixed',
-      left: '50%',
-      top: '100px'
-    }
-  }
+      left: 0,
+      right: 0,
+      top: '100px',
+    },
+  };
 
   add = (noticeData: noticeDataProps) => {
     const { NoticeList } = this.state;
@@ -55,28 +56,28 @@ export default class Notification extends React.Component<
   };
 
   render(): React.ReactNode {
-    const {prefixCls, style, } = this.props;
+    const { prefixCls, style } = this.props;
     const { NoticeList } = this.state;
     let renderNode = NoticeList.map(item => {
-      const {key, content, onClose } = item;
-      const noticeProps:NoticeProps = {
+      const { key, content, onClose, ...others } = item;
+      const noticeProps: NoticeProps = {
         prefixCls,
-        ...item,
         onClose: () => {
           this.delete(key);
-          if(onClose) {
-            onClose()
+          if (onClose) {
+            onClose();
           }
         },
-        children: content
-      }
+        children: content,
+        ...others,
+      };
       return <Notice {...noticeProps} key={item.key} />;
     });
     return (
-      <div className={`${prefixCls}-notification`} style={style} >
+      <div className={`${prefixCls}-notification`} style={style}>
         <Animate transitionName="fade">{renderNode}</Animate>
       </div>
-    )
+    );
   }
 }
 
@@ -85,7 +86,7 @@ Notification.newInstance = function(
   NotificationProps: NotificationProps,
 ) {
   const node: Element = document.createElement('div');
-  node.className = 'notice-list';
+  node.className = `${NotificationProps.prefixCls}`;
   document.body.appendChild(node);
 
   function ref(Notification: Notification) {

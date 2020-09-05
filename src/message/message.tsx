@@ -3,18 +3,25 @@ import { Icon } from 'antd';
 import classNames from 'classnames';
 import Notification from './core/Notification';
 
+const prefixCls: string = 'myantd-message';
+
 let messageInstance: any = null;
-Notification.newInstance((instance: any) => {
-  messageInstance = instance;
-});
+Notification.newInstance(
+  (instance: any) => {
+    messageInstance = instance;
+  },
+  {
+    prefixCls: prefixCls,
+  },
+);
 
 export interface messageProps {
-  open: (args: ArgsProps) => void,
-  success: (content: string, duration?: number, onClose?: () => {}) => {},
-  error: (content: string, duration?: number, onClose?: () => {}) => {},
-  info: (content: string, duration?: number, onClose?: () => {}) => {},
-  warning: (content: string, duration?: number, onClose?: () => {}) => {},
-  loading: (content: string, duration?: number, onClose?: () => {}) => {},
+  open: (args: ArgsProps) => void;
+  success: (content: string, duration?: number, onClose?: () => {}) => {};
+  error: (content: string, duration?: number, onClose?: () => {}) => {};
+  info: (content: string, duration?: number, onClose?: () => {}) => {};
+  warning: (content: string, duration?: number, onClose?: () => {}) => {};
+  loading: (content: string, duration?: number, onClose?: () => {}) => {};
   [index: string]: any;
 }
 
@@ -37,24 +44,27 @@ enum messageIcons {
   loading = 'loading',
 }
 
-const messageApi:any = {
-  open: (args: ArgsProps):void => {
-    const {content, duration, type, onClose} = args;
-    const classes = classNames(`myantd-message-${type}`);
+const messageApi: any = {
+  open: (args: ArgsProps): void => {
+    const { content, duration, type, onClose } = args;
+    const classes = classNames(`${prefixCls}-${type}`);
     messageInstance.add({
       content: (
         <span
           className={classes}
           style={{ display: 'flex', alignItems: 'center' }}
         >
-          <Icon type={messageIcons[type]} theme={type === 'loading' ? 'outlined' : 'filled'} />
+          <Icon
+            type={messageIcons[type]}
+            theme={type === 'loading' ? 'outlined' : 'filled'}
+          />
           {content}
         </span>
       ),
       duration,
       onClose: onClose,
     });
-  }
+  },
 };
 
 ['info', 'success', 'error', 'warning', 'loading'].forEach(type => {
@@ -63,10 +73,9 @@ const messageApi:any = {
     duration: number = 3,
     onClose: () => {},
   ) => {
-    messageApi.open({content, duration, type: type as NoticeType , onClose})
+    messageApi.open({ content, duration, type: type as NoticeType, onClose });
   };
 });
-
 
 const message: messageProps = messageApi;
 export default message;

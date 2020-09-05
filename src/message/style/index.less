@@ -9,6 +9,29 @@
 }
 
 .@{message} {
+  &-notification {
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    top: 100px;
+    pointer-events: none;
+  }
+
+  &-notice {
+    display: flex;
+    justify-content: center;
+
+    &-conetnt {
+      width: max-content;
+      padding: 10px 16px;
+      margin: 10px 0px;
+      background: rgb(255, 255, 255);
+      border-radius: 4px;
+      box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px;
+      pointer-events: all;
+    }
+  }
+
   &-success i {
     .message-type(@color-success);
   }

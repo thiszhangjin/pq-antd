@@ -21,16 +21,7 @@ export default class Notice extends React.Component<NoticeProps, IState> {
     super(props);
   }
 
-  static defaultProps = {
-    style: {
-      width: 'max-content',
-      padding: '10px 16px',
-      margin: '10px 0',
-      background: '#fff',
-      borderRadius: '4px',
-      boxShadow: '0 4px 12px rgba(0,0,0,.15)',
-    }
-  }
+  static defaultProps = {};
 
   componentDidMount() {
     this.startCloseTimer();
@@ -57,14 +48,13 @@ export default class Notice extends React.Component<NoticeProps, IState> {
   };
 
   render(): React.ReactNode {
-    const { prefixCls, style, className, children, ...others } = this.props;
+    const { prefixCls, className, children, ...others } = this.props;
     const classes = classNames(`${prefixCls}-notice`, className);
     return (
       <div
         className={classes}
         onMouseMove={this.resetCloseTimer}
         onMouseOut={this.startCloseTimer}
-        style={style}
         {...others}
       >
         <div className={`${prefixCls}-notice-conetnt`}>{children}</div>
