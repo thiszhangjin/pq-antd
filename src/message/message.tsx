@@ -8,60 +8,65 @@ Notification.newInstance((instance: any) => {
   messageInstance = instance;
 });
 
-// type types = "success" | "error" | "info" | "warning" | "loading"
-interface messageType {
-  type: string;
-  icon: string;
+export interface messageProps {
+  open: (args: ArgsProps) => void,
+  success: (content: string, duration?: number, onClose?: () => {}) => {},
+  error: (content: string, duration?: number, onClose?: () => {}) => {},
+  info: (content: string, duration?: number, onClose?: () => {}) => {},
+  warning: (content: string, duration?: number, onClose?: () => {}) => {},
+  loading: (content: string, duration?: number, onClose?: () => {}) => {},
+  [index: string]: any;
 }
 
-const messageTypes: messageType[] = [
-  {
-    type: 'success',
-    icon: 'check-circle',
-  },
-  {
-    type: 'error',
-    icon: 'close-circle',
-  },
-  {
-    type: 'info',
-    icon: 'info-circle',
-  },
-  {
-    type: 'warning',
-    icon: 'exclamation-circle',
-  },
-  {
-    type: 'loading',
-    icon: 'loading',
-  },
-];
+export type NoticeType = 'info' | 'success' | 'error' | 'warning' | 'loading';
 
-const message: any = {};
+export interface ArgsProps {
+  content: React.ReactNode;
+  duration: number | null;
+  type: NoticeType;
+  onClose?: () => void;
+  icon?: React.ReactNode;
+  key?: string | number;
+}
 
-messageTypes.forEach(item => {
-  message[item.type] = (
-    content: string,
-    duration: number = 3,
-    onClose: () => {},
-  ) => {
-    const classes = classNames(`myantd-message-${item.type}`);
+enum messageIcons {
+  info = 'info-circle',
+  success = 'check-circle',
+  error = 'close-circle',
+  warning = 'exclamation-circle',
+  loading = 'loading',
+}
+
+const messageApi:any = {
+  open: (args: ArgsProps):void => {
+    const {content, duration, type, onClose} = args;
+    const classes = classNames(`myantd-message-${type}`);
     messageInstance.add({
       content: (
         <span
           className={classes}
           style={{ display: 'flex', alignItems: 'center' }}
         >
-          <Icon type={item.icon} theme="filled" />
+          <Icon type={messageIcons[type]} theme={type === 'loading' ? 'outlined' : 'filled'} />
           {content}
         </span>
       ),
       duration,
       onClose: onClose,
     });
+  }
+};
+
+['info', 'success', 'error', 'warning', 'loading'].forEach(type => {
+  messageApi[type] = (
+    content: string,
+    duration: number = 3,
+    onClose: () => {},
+  ) => {
+    messageApi.open({content, duration, type: type as NoticeType , onClose})
   };
 });
 
-console.log(message);
 
+const message: messageProps = messageApi;
 export default message;

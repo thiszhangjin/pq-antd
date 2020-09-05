@@ -5,12 +5,12 @@
 .message-type(@color) {
   color: @color;
   font-size: 16px;
-  margin-right: 2px;
+  margin-right: 5px;
 }
 
 .@{message} {
   &-success i {
-    .message-type(@color-primary);
+    .message-type(@color-success);
   }
   &-error i {
     .message-type(@color-danger);
@@ -20,6 +20,9 @@
   }
   &-warning i {
     .message-type(@color-warning);
+  }
+  &-loading i {
+    .message-type(@color-primary);
   }
 }
 

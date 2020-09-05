@@ -55,16 +55,20 @@ export default class Notification extends React.Component<
   };
 
   render(): React.ReactNode {
-    const {prefixCls, style} = this.props;
+    const {prefixCls, style, } = this.props;
     const { NoticeList } = this.state;
     let renderNode = NoticeList.map(item => {
+      const {key, content, onClose } = item;
       const noticeProps:NoticeProps = {
         prefixCls,
         ...item,
         onClose: () => {
-          this.delete(item.key);
+          this.delete(key);
+          if(onClose) {
+            onClose()
+          }
         },
-        children: item.content
+        children: content
       }
       return <Notice {...noticeProps} key={item.key} />;
     });
