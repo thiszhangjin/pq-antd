@@ -10,27 +10,40 @@ export interface NoticeProps {
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   onClose?: () => void;
 }
-interface IState {}
+interface NoticeState {
+  duration: number;
+}
 
-export default class Notice extends React.Component<NoticeProps, IState> {
+export default class Notice extends React.Component<NoticeProps, NoticeState> {
   public timer: number | null = null;
-  public duration: number = this.props.duration || 3;
-  public readonly state: Readonly<IState> = {};
+  public readonly state: Readonly<NoticeState> = {
+    duration: 3,
+  };
 
   public constructor(props: NoticeProps) {
     super(props);
   }
 
-  static defaultProps = {};
+  static getDerivedStateFromProps(props: NoticeProps, state: NoticeState) {
+    return {
+      duration: props.duration || 3,
+    };
+  }
 
   componentDidMount() {
     this.startCloseTimer();
   }
 
+  componentDidUpdate() {
+    this.resetCloseTimer();
+    this.startCloseTimer();
+  }
+
   startCloseTimer = () => {
+    const { duration } = this.state;
     this.timer = window.setTimeout(() => {
       this.closeNotice();
-    }, this.duration * 1000);
+    }, duration * 1000);
   };
 
   resetCloseTimer = () => {

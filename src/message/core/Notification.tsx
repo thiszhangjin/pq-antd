@@ -9,7 +9,7 @@ interface NotificationProps {
 }
 
 interface noticeDataProps extends NoticeProps {
-  key: number;
+  key: number | string;
   content: string | ReactNode;
 }
 
@@ -41,14 +41,23 @@ export default class Notification extends React.Component<
   };
 
   add = (noticeData: noticeDataProps) => {
+    const { key } = noticeData;
     const { NoticeList } = this.state;
-    noticeData.key = new Date().getTime();
+    noticeData.key = key || new Date().getTime();
+
+    const filterIndex = NoticeList.map(item => item.key).indexOf(key);
+    if (filterIndex > -1) {
+      NoticeList[filterIndex] = noticeData;
+    } else {
+      NoticeList.push(noticeData);
+    }
+
     this.setState({
-      NoticeList: [...NoticeList, noticeData],
+      NoticeList: [...NoticeList],
     });
   };
 
-  delete = (key: number) => {
+  delete = (key: number | string) => {
     const { NoticeList } = this.state;
     this.setState({
       NoticeList: NoticeList.filter(item => item.key !== key),

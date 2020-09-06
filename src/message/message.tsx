@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Icon } from 'antd';
 import classNames from 'classnames';
-import Notification from './core/Notification';
+import Notification from './core/notification';
 
 const prefixCls: string = 'myantd-message';
 
@@ -15,18 +15,6 @@ Notification.newInstance(
   },
 );
 
-export interface messageProps {
-  open: (args: ArgsProps) => void;
-  success: (content: string, duration?: number, onClose?: () => {}) => {};
-  error: (content: string, duration?: number, onClose?: () => {}) => {};
-  info: (content: string, duration?: number, onClose?: () => {}) => {};
-  warning: (content: string, duration?: number, onClose?: () => {}) => {};
-  loading: (content: string, duration?: number, onClose?: () => {}) => {};
-  [index: string]: any;
-}
-
-export type NoticeType = 'info' | 'success' | 'error' | 'warning' | 'loading';
-
 export interface ArgsProps {
   content: React.ReactNode;
   duration: number | null;
@@ -35,6 +23,20 @@ export interface ArgsProps {
   icon?: React.ReactNode;
   key?: string | number;
 }
+
+export type jsonContent = string | Partial<ArgsProps>;
+
+export interface messageProps {
+  open: (args: ArgsProps) => void;
+  success: (content: jsonContent, duration?: number, onClose?: () => {}) => {};
+  error: (content: jsonContent, duration?: number, onClose?: () => {}) => {};
+  info: (content: jsonContent, duration?: number, onClose?: () => {}) => {};
+  warning: (content: jsonContent, duration?: number, onClose?: () => {}) => {};
+  loading: (content: jsonContent, duration?: number, onClose?: () => {}) => {};
+  [index: string]: any;
+}
+
+export type NoticeType = 'info' | 'success' | 'error' | 'warning' | 'loading';
 
 enum messageIcons {
   info = 'info-circle',
@@ -46,7 +48,7 @@ enum messageIcons {
 
 const messageApi: any = {
   open: (args: ArgsProps): void => {
-    const { content, duration, type, onClose } = args;
+    const { content, duration, type, onClose, key } = args;
     const classes = classNames(`${prefixCls}-${type}`);
     messageInstance.add({
       content: (
@@ -63,17 +65,22 @@ const messageApi: any = {
       ),
       duration,
       onClose: onClose,
+      key,
     });
   },
 };
 
 ['info', 'success', 'error', 'warning', 'loading'].forEach(type => {
   messageApi[type] = (
-    content: string,
+    content: jsonContent,
     duration: number = 3,
     onClose: () => {},
   ) => {
-    messageApi.open({ content, duration, type: type as NoticeType, onClose });
+    if (typeof content === 'object') {
+      messageApi.open({ ...content, type });
+    } else {
+      messageApi.open({ content, duration, type: type as NoticeType, onClose });
+    }
   };
 });
 
