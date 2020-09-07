@@ -7,8 +7,8 @@ function messageExaple() {
     key: 'updateMessage',
   });
   setTimeout(() => {
-    message.success({ content: '江湖故人', key: 'updateMessage', duration: 5 });
-  }, 2000);
+    message.success({ content: '江湖故人', key: 'updateMessage', duration: 3 });
+  }, 1000);
 }
 
 export default () => (

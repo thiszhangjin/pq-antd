@@ -7,6 +7,7 @@ export interface NoticeProps {
   className?: string;
   duration?: number | null;
   children?: React.ReactNode;
+  update?: boolean,
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   onClose?: () => void;
 }
@@ -35,8 +36,14 @@ export default class Notice extends React.Component<NoticeProps, NoticeState> {
   }
 
   componentDidUpdate() {
+    if(this.props.update){
+      this.resetCloseTimer();
+      this.startCloseTimer();
+    }
+  }
+
+  componentWillUnmount() {
     this.resetCloseTimer();
-    this.startCloseTimer();
   }
 
   startCloseTimer = () => {
@@ -66,11 +73,9 @@ export default class Notice extends React.Component<NoticeProps, NoticeState> {
     return (
       <div
         className={classes}
-        onMouseMove={this.resetCloseTimer}
-        onMouseOut={this.startCloseTimer}
         {...others}
       >
-        <div className={`${prefixCls}-notice-conetnt`}>{children}</div>
+        <div className={`${prefixCls}-notice-conetnt`}  onMouseMove={this.resetCloseTimer} onMouseOut={this.startCloseTimer}>{children}</div>
       </div>
     );
   }

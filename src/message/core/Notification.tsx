@@ -47,6 +47,7 @@ export default class Notification extends React.Component<
 
     const filterIndex = NoticeList.map(item => item.key).indexOf(key);
     if (filterIndex > -1) {
+      noticeData.update = true;
       NoticeList[filterIndex] = noticeData;
     } else {
       NoticeList.push(noticeData);
