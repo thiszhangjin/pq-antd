@@ -17,14 +17,14 @@ Notification.newInstance(
 
 export interface ArgsProps {
   content: React.ReactNode;
-  duration: number | null;
-  type: NoticeType;
-  onClose?: () => void;
+  duration?: number | null;
+  type?: NoticeType;
   icon?: React.ReactNode;
   key?: string | number;
+  onClose?: () => void;
 }
 
-export type jsonContent = string | Partial<ArgsProps>;
+export type jsonContent = string | ArgsProps;
 
 export interface messageProps {
   open: (args: ArgsProps) => void;
@@ -48,20 +48,26 @@ enum messageIcons {
 
 const messageApi: any = {
   open: (args: ArgsProps): void => {
-    const { content, duration, type, onClose, key } = args;
+    const { content, duration, type, icon, key, onClose } = args;
     const classes = classNames(`${prefixCls}-${type}`);
+    let iconNode = icon;
+    if (type) {
+      iconNode = (
+        <Icon
+          type={messageIcons[type]}
+          theme={type === 'loading' ? 'outlined' : 'filled'}
+        />
+      );
+    }
     messageInstance.add({
       content: (
-        <span
+        <div
           className={classes}
           style={{ display: 'flex', alignItems: 'center' }}
         >
-          <Icon
-            type={messageIcons[type]}
-            theme={type === 'loading' ? 'outlined' : 'filled'}
-          />
+          {iconNode}
           {content}
-        </span>
+        </div>
       ),
       duration,
       onClose: onClose,
