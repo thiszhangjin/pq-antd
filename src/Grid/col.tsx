@@ -20,7 +20,7 @@ interface IState {
 export default class Col extends React.Component<IProps, IState> {
   static contextType = RowContext;
   public readonly state: Readonly<IState> = {
-    prefixCls: 'myantd',
+    prefixCls: 'pq-antd',
   };
 
   public constructor(props: IProps) {

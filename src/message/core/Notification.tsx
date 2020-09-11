@@ -31,7 +31,7 @@ export default class Notification extends React.Component<
   }
 
   static defaultProps = {
-    prefixCls: 'myantd',
+    prefixCls: 'pq-antd',
     style: {
       position: 'fixed',
       left: 0,

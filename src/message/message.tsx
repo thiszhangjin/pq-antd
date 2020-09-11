@@ -3,7 +3,7 @@ import { Icon } from 'antd';
 import classNames from 'classnames';
 import Notification from './core/notification';
 
-const prefixCls: string = 'myantd-message';
+const prefixCls: string = 'pq-antd-message';
 
 let messageInstance: any = null;
 Notification.newInstance(

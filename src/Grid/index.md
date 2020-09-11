@@ -4,7 +4,7 @@
 
 ```tsx
 import React from 'react';
-import { Grid } from 'myAntd';
+import { Grid } from 'pq-antd';
 
 const { Row, Col } = Grid;
 
@@ -132,7 +132,7 @@ export default () => (
 
 ```tsx
 import React from 'react';
-import { Grid } from 'myAntd';
+import { Grid } from 'pq-antd';
 
 const { Row, Col } = Grid;
 
@@ -246,7 +246,7 @@ export default () => (
 
 ```tsx
 import React from 'react';
-import { Grid } from 'myAntd';
+import { Grid } from 'pq-antd';
 
 const { Row, Col } = Grid;
 
@@ -330,7 +330,7 @@ export default () => (
 
 ```tsx
 import React from 'react';
-import { Grid } from 'myAntd';
+import { Grid } from 'pq-antd';
 
 const { Row, Col } = Grid;
 
@@ -370,7 +370,7 @@ Flex 布局
 
 ```tsx
 import React from 'react';
-import { Grid } from 'myAntd';
+import { Grid } from 'pq-antd';
 
 const { Row, Col } = Grid;
 

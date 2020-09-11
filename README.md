@@ -1,6 +1,6 @@
 # myAntd
 
-在线地址 https://thiszhangjin.github.io/myAntd
+在线地址 https://thiszhangjin.github.io/pq-antd
 
 ## Getting Started
 

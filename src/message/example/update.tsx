@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, message } from '../../index';
+import { Button, message } from 'pq-antd';
 
 function messageExaple() {
   message.loading({

@@ -7,7 +7,7 @@ export interface ButtonGroupProps {
 
 const ButtonGroup: React.SFC<ButtonGroupProps> = props => {
   const { ...orthers } = props;
-  const classes = classNames('myantd-button-group');
+  const classes = classNames('pq-antd-button-group');
   return <div {...orthers} className={classes} />;
 };
 

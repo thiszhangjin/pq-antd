@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, message } from '../../index';
+import { Button, message } from 'pq-antd';
 
 function messageExaple(type: string) {
   message[type]('谁看江上明月 谁听江风浩荡', 3 , () => {

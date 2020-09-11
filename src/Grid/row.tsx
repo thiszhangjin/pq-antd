@@ -30,7 +30,7 @@ interface IState {
 
 export default class Row extends React.Component<IProps, IState> {
   public readonly state: Readonly<IState> = {
-    prefixCls: 'myantd',
+    prefixCls: 'pq-antd',
   };
 
   public constructor(props: IProps) {

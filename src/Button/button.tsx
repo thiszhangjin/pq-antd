@@ -31,7 +31,7 @@ interface IState {
 export default class Button extends React.Component<IProps, IState> {
   static Group: typeof Group;
   public readonly state: Readonly<IState> = {
-    prefixCls: 'myantd',
+    prefixCls: 'pq-antd',
   };
 
   public constructor(props: IProps) {
