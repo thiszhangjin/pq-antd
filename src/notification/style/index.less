@@ -1,0 +1,120 @@
+@import '../../style/default.less';
+
+@notification: ~'@{prefix}-notification';
+@notice-padding-top: 16px;
+@notice-padding-right: 24px;
+
+.notification-type(@color) {
+  color: @color;
+  font-size: 24px;
+  margin-right: 20px;
+}
+
+.fade-effect() {
+  animation-duration: 0.2s;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.@{notification} {
+  &-notification {
+    position: fixed;
+    right: 50px;
+    top: 50px;
+    pointer-events: none;
+  }
+
+  &-notice {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin: 10px 0px;
+
+    &-conetnt {
+      width: max-content;
+      padding: @notice-padding-top @notice-padding-right;
+      background: rgb(255, 255, 255);
+      border-radius: 4px;
+      pointer-events: all;
+      box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px;
+    }
+
+    &-close {
+      position: absolute;
+      pointer-events: all;
+      top: @notice-padding-top;
+      right: @notice-padding-right;
+      cursor: pointer;
+    }
+
+    &-message {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: rgba(0, 0, 0, 0.85);
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    &-description {
+      font-size: 14px;
+    }
+
+    &-btn {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 5px;
+    }
+  }
+
+  &-success i {
+    .notification-type(@color-success);
+  }
+  &-error i {
+    .notification-type(@color-danger);
+  }
+  &-info i {
+    .notification-type(@color-primary);
+  }
+  &-warning i {
+    .notification-type(@color-warning);
+  }
+  &-loading i {
+    .notification-type(@color-primary);
+  }
+
+  &-fade-enter {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+
+  &-fade-enter-active {
+    opacity: 1;
+    animation-name: NotificationMoveIn;
+    .fade-effect();
+  }
+
+  &-fade-leave&-fade-leave-active {
+    animation-name: NotificationMoveOut;
+    .fade-effect();
+  }
+
+  @keyframes NotificationMoveIn {
+    0% {
+      opacity: 0;
+      transform: translateX(400px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+  }
+
+  @keyframes NotificationMoveOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}

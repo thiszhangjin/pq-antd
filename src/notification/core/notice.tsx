@@ -1,4 +1,5 @@
 import React from 'react';
+import { Icon } from 'antd';
 import classNames from 'classnames';
 
 export interface NoticeProps {
@@ -7,7 +8,8 @@ export interface NoticeProps {
   className?: string;
   duration?: number | null;
   children?: React.ReactNode;
-  update?: boolean,
+  update?: boolean;
+  closable?: boolean;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   onClose?: () => void;
 }
@@ -18,7 +20,7 @@ interface NoticeState {
 export default class Notice extends React.Component<NoticeProps, NoticeState> {
   public timer: number | null = null;
   public readonly state: Readonly<NoticeState> = {
-    duration: 3,
+    duration: 0,
   };
 
   public constructor(props: NoticeProps) {
@@ -27,7 +29,7 @@ export default class Notice extends React.Component<NoticeProps, NoticeState> {
 
   static getDerivedStateFromProps(props: NoticeProps, state: NoticeState) {
     return {
-      duration: props.duration || 3,
+      duration: props.duration,
     };
   }
 
@@ -36,7 +38,7 @@ export default class Notice extends React.Component<NoticeProps, NoticeState> {
   }
 
   componentDidUpdate() {
-    if(this.props.update){
+    if (this.props.update) {
       this.resetCloseTimer();
       this.startCloseTimer();
     }
@@ -48,9 +50,11 @@ export default class Notice extends React.Component<NoticeProps, NoticeState> {
 
   startCloseTimer = () => {
     const { duration } = this.state;
-    this.timer = window.setTimeout(() => {
-      this.closeNotice();
-    }, duration * 1000);
+    if (duration) {
+      this.timer = window.setTimeout(() => {
+        this.closeNotice();
+      }, duration * 1000);
+    }
   };
 
   resetCloseTimer = () => {
@@ -65,17 +69,29 @@ export default class Notice extends React.Component<NoticeProps, NoticeState> {
     if (onClose) {
       onClose();
     }
+    this.resetCloseTimer();
   };
 
   render(): React.ReactNode {
-    const { prefixCls, className, children, ...others } = this.props;
+    const { prefixCls, className, children, closable, ...others } = this.props;
     const classes = classNames(`${prefixCls}-notice`, className);
     return (
-      <div
-        className={classes}
-        {...others}
-      >
-        <div className={`${prefixCls}-notice-conetnt`}  onMouseMove={this.resetCloseTimer} onMouseOut={this.startCloseTimer}>{children}</div>
+      <div className={classes} {...others}>
+        <div
+          className={`${prefixCls}-notice-conetnt`}
+          onMouseMove={this.resetCloseTimer}
+          onMouseOut={this.startCloseTimer}
+        >
+          {children}
+        </div>
+        {closable && (
+          <div
+            className={`${prefixCls}-notice-close`}
+            onClick={this.closeNotice}
+          >
+            <Icon type="close" />
+          </div>
+        )}
       </div>
     );
   }

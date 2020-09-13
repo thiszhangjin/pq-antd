@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
-import Notice, { NoticeProps } from './Notice';
+import Notice, { NoticeProps } from './notice';
 import Animate from 'rc-animate';
 
 interface NotificationProps {
@@ -15,6 +15,12 @@ interface noticeDataProps extends NoticeProps {
 
 interface IState {
   NoticeList: noticeDataProps[];
+}
+
+let count: number = 0;
+function getKey(): string {
+  count++;
+  return new Date().getTime() + '' + count;
 }
 
 export default class Notification extends React.Component<
@@ -34,16 +40,14 @@ export default class Notification extends React.Component<
     prefixCls: 'pq-antd',
     style: {
       position: 'fixed',
-      left: 0,
-      right: 0,
-      top: '100px',
+      zIndex: 1000,
     },
   };
 
   add = (noticeData: noticeDataProps) => {
     const { key } = noticeData;
     const { NoticeList } = this.state;
-    noticeData.key = key || new Date().getTime();
+    noticeData.key = key || getKey();
 
     const filterIndex = NoticeList.map(item => item.key).indexOf(key);
     if (filterIndex > -1) {
@@ -85,7 +89,7 @@ export default class Notification extends React.Component<
     });
     return (
       <div className={`${prefixCls}-notification`} style={style}>
-        <Animate transitionName="fade">{renderNode}</Animate>
+        <Animate transitionName={`${prefixCls}-fade`}>{renderNode}</Animate>
       </div>
     );
   }

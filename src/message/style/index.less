@@ -8,6 +8,12 @@
   margin-right: 5px;
 }
 
+.fade-effect() {
+  animation-duration: 0.2s;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
 .@{message} {
   &-notification {
     position: fixed;
@@ -27,8 +33,8 @@
       margin: 10px 0px;
       background: rgb(255, 255, 255);
       border-radius: 4px;
-      box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px;
       pointer-events: all;
+      box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px;
     }
   }
 
@@ -47,49 +53,35 @@
   &-loading i {
     .message-type(@color-primary);
   }
-}
 
-.fade-effect() {
-  animation-duration: 0.3s;
-  animation-fill-mode: both;
-  animation-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
-}
-
-&-fade-enter {
-  opacity: 0;
-  .fade-effect();
-  animation-play-state: paused;
-}
-
-&-fade-leave {
-  .fade-effect();
-  animation-play-state: paused;
-}
-
-&-fade-enter&-fade-enter-active {
-  animation-name: rcNotificationFadeIn;
-  animation-play-state: running;
-}
-
-&-fade-leave&-fade-leave-active {
-  animation-name: rcDialogFadeOut;
-  animation-play-state: running;
-}
-
-@keyframes rcNotificationFadeIn {
-  0% {
+  &-fade-enter {
     opacity: 0;
   }
-  100% {
-    opacity: 1;
+  &-fade-enter-active {
+    animation-name: MessageMoveIn;
+    .fade-effect();
   }
-}
 
-@keyframes rcDialogFadeOut {
-  0% {
-    opacity: 1;
+  &-fade-leave-active {
+    animation-name: MessageMoveOut;
+    .fade-effect();
   }
-  100% {
-    opacity: 0;
+
+  @keyframes MessageMoveIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes MessageMoveOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
   }
 }

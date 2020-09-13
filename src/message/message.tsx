@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { Icon } from 'antd';
 import classNames from 'classnames';
-import Notification from './core/notification';
+import Notification from '../notification/core/notification';
 
 const prefixCls: string = 'pq-antd-message';
 
@@ -70,8 +70,8 @@ const messageApi: any = {
         </div>
       ),
       duration,
-      onClose: onClose,
       key,
+      onClose: onClose,
     });
   },
 };

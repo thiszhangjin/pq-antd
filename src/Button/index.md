@@ -4,7 +4,7 @@
 
 ```tsx
 import React from 'react';
-import { Button } from 'myAntd';
+import { Button } from 'pq-antd';
 
 export default () => (
   <div>
@@ -21,7 +21,7 @@ export default () => (
 ```tsx
 import React from 'react';
 import { Icon } from 'antd';
-import { Button } from 'myAntd';
+import { Button } from 'pq-antd';
 
 export default () => (
   <div>
@@ -45,7 +45,7 @@ export default () => (
 ```tsx
 import React from 'react';
 import { Icon } from 'antd';
-import { Button } from 'myAntd';
+import { Button } from 'pq-antd';
 
 export default () => (
   <div>
@@ -69,7 +69,7 @@ export default () => (
 ```tsx
 import React from 'react';
 import { Icon } from 'antd';
-import { Button } from 'myAntd';
+import { Button } from 'pq-antd';
 
 const handleClick = (e: React.MouseEvent) => {
   alert('click');
@@ -95,7 +95,7 @@ export default () => (
 
 ```tsx
 import React from 'react';
-import { Button } from 'myAntd';
+import { Button } from 'pq-antd';
 
 export default () => (
   <div>
