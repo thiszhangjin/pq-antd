@@ -19,9 +19,43 @@
 .@{notification} {
   &-notification {
     position: fixed;
-    right: 50px;
-    top: 50px;
     pointer-events: none;
+
+    &-topLeft {
+      left: 50px;
+      top: 50px;
+      .@{notification}-fade-enter {
+        transform: translateX(-400px);
+        opacity: 0;
+      }
+    }
+
+    &-topRight {
+      right: 50px;
+      top: 50px;
+      .@{notification}-fade-enter {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+    }
+
+    &-bottomLeft {
+      left: 50px;
+      bottom: 50px;
+      .@{notification}-fade-enter {
+        transform: translateX(-400px);
+        opacity: 0;
+      }
+    }
+
+    &-bottomRight {
+      right: 50px;
+      bottom: 50px;
+      .@{notification}-fade-enter {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+    }
   }
 
   &-notice {
@@ -82,11 +116,6 @@
     .notification-type(@color-primary);
   }
 
-  &-fade-enter {
-    transform: translateX(400px);
-    opacity: 0;
-  }
-
   &-fade-enter-active {
     opacity: 1;
     animation-name: NotificationMoveIn;
@@ -101,7 +130,6 @@
   @keyframes NotificationMoveIn {
     0% {
       opacity: 0;
-      transform: translateX(400px);
     }
     100% {
       opacity: 1;

@@ -1,12 +1,20 @@
 import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 import Notice, { NoticeProps } from './notice';
 import Animate from 'rc-animate';
 
-interface NotificationProps {
+export interface NotificationProps {
   prefixCls: string;
   style?: React.CSSProperties;
+  placement?: placementType;
 }
+
+export type placementType =
+  | 'topLeft'
+  | 'topRight'
+  | 'bottomLeft'
+  | 'bottomRight';
 
 interface noticeDataProps extends NoticeProps {
   key: number | string;
@@ -70,8 +78,11 @@ export default class Notification extends React.Component<
   };
 
   render(): React.ReactNode {
-    const { prefixCls, style } = this.props;
+    const { prefixCls, placement, style } = this.props;
     const { NoticeList } = this.state;
+    const classes = classNames(`${prefixCls}-notification`, {
+      [`${prefixCls}-notification-${placement}`]: placement,
+    });
     let renderNode = NoticeList.map(item => {
       const { key, content, onClose, ...others } = item;
       const noticeProps: NoticeProps = {
@@ -88,7 +99,7 @@ export default class Notification extends React.Component<
       return <Notice {...noticeProps} key={item.key} />;
     });
     return (
-      <div className={`${prefixCls}-notification`} style={style}>
+      <div className={classes} style={style}>
         <Animate transitionName={`${prefixCls}-fade`}>{renderNode}</Animate>
       </div>
     );

@@ -1,19 +1,12 @@
 import React, { ReactNode } from 'react';
 import { Icon } from 'antd';
 import classNames from 'classnames';
-import Notification from './core/notification';
+import Notification, {
+  NotificationProps,
+  placementType,
+} from './core/notification';
 
 const prefixCls: string = 'pq-antd-notification';
-
-let notificationInstance: any = null;
-Notification.newInstance(
-  (instance: any) => {
-    notificationInstance = instance;
-  },
-  {
-    prefixCls: prefixCls,
-  },
-);
 
 export interface ArgsProps {
   message: string | React.ReactNode;
@@ -22,11 +15,12 @@ export interface ArgsProps {
   type?: NoticeType;
   icon?: React.ReactNode;
   btn?: React.ReactNode;
+  placement?: placementType;
   key?: string | number;
   onClose?: () => void;
 }
 
-export interface notificationProps {
+export interface notificationInstanceProps {
   open: (args: ArgsProps) => void;
   success: (args: ArgsProps) => {};
   error: (args: ArgsProps) => {};
@@ -50,9 +44,40 @@ function checkDuration(duration: any) {
   return typeof duration === 'number' && duration >= 0;
 }
 
+const NotificationInstances = new Map();
+function getNotificationInstance(
+  args: NotificationProps,
+  callback: (instance: any) => void,
+) {
+  const { placement = 'topRight' } = args;
+  if (NotificationInstances.get(placement)) {
+    callback(NotificationInstances.get(placement));
+  } else {
+    Notification.newInstance(
+      (instance: any) => {
+        NotificationInstances.set(placement, instance);
+        callback(instance);
+      },
+      {
+        ...args,
+        placement,
+      },
+    );
+  }
+}
+
 const notificationApi: any = {
   open: (args: ArgsProps): void => {
-    const { message, description, type, icon, btn, key, onClose } = args;
+    const {
+      message,
+      description,
+      type,
+      icon,
+      btn,
+      placement,
+      key,
+      onClose,
+    } = args;
     let { duration } = args;
     if (!checkDuration(duration)) {
       duration = 4.5;
@@ -62,24 +87,35 @@ const notificationApi: any = {
     if (type) {
       iconNode = <Icon type={notificationIcons[type]} />;
     }
-    notificationInstance.add({
-      content: (
-        <div className={classes} style={{ display: 'flex', width: '350px' }}>
-          {iconNode}
-          <div>
-            <div className={`${prefixCls}-notice-message`}>{message}</div>
-            <div className={`${prefixCls}-notice-description`}>
-              {description}
+    getNotificationInstance(
+      {
+        prefixCls,
+        placement,
+      },
+      (instance: any): void => {
+        instance.add({
+          content: (
+            <div
+              className={classes}
+              style={{ display: 'flex', width: '350px' }}
+            >
+              {iconNode}
+              <div>
+                <div className={`${prefixCls}-notice-message`}>{message}</div>
+                <div className={`${prefixCls}-notice-description`}>
+                  {description}
+                </div>
+                <div className={`${prefixCls}-notice-btn`}>{btn}</div>
+              </div>
             </div>
-            <div className={`${prefixCls}-notice-btn`}>{btn}</div>
-          </div>
-        </div>
-      ),
-      duration,
-      key,
-      closable: true,
-      onClose: onClose,
-    });
+          ),
+          duration,
+          key,
+          closable: true,
+          onClose: onClose,
+        });
+      },
+    );
   },
 };
 
@@ -89,5 +125,5 @@ const notificationApi: any = {
   };
 });
 
-const notification: notificationProps = notificationApi;
+const notification: notificationInstanceProps = notificationApi;
 export default notification;
