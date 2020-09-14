@@ -54,7 +54,7 @@ const notificationApi: any = {
   open: (args: ArgsProps): void => {
     const { message, description, type, icon, btn, key, onClose } = args;
     let { duration } = args;
-    if (!checkDuration(checkDuration)) {
+    if (!checkDuration(duration)) {
       duration = 4.5;
     }
     const classes = classNames(`${prefixCls}-${type}`);
