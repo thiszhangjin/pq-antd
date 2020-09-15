@@ -78,7 +78,7 @@ export default class Notice extends React.Component<NoticeProps, NoticeState> {
     return (
       <div className={classes} {...others}>
         <div
-          className={`${prefixCls}-notice-conetnt`}
+          className={`${prefixCls}-notice-content`}
           onMouseMove={this.resetCloseTimer}
           onMouseOut={this.startCloseTimer}
         >

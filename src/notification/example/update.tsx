@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, notification } from 'pq-antd';
 
-function notificationExaple() {
+function notificationExample() {
   notification.loading({
     message: '寒江孤影',
     description:
@@ -21,6 +21,6 @@ function notificationExaple() {
 
 export default () => (
   <div>
-    <Button onClick={notificationExaple}>更新消息内容</Button>
+    <Button onClick={notificationExample}>更新消息内容</Button>
   </div>
 );

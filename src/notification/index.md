@@ -1,7 +1,7 @@
 ## Notification
 
 基本使用
-<code src="./example/simple.tsx" />
+<code src="./example/basic.tsx" />
 
 带有图标的通知提醒框
 <code src="./example/icon.tsx" />

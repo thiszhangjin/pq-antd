@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, notification } from 'pq-antd';
 
-function notificationExaple(placement: string) {
+function notificationExample(placement: string) {
   notification.open({
     message: placement,
     description:
@@ -12,10 +12,12 @@ function notificationExaple(placement: string) {
 
 export default () => (
   <div>
-    <Button onClick={() => notificationExaple('topLeft')}>topLeft</Button>
-    <Button onClick={() => notificationExaple('topRight')}>topRight</Button>
-    <Button onClick={() => notificationExaple('bottomLeft')}>bottomLeft</Button>
-    <Button onClick={() => notificationExaple('bottomRight')}>
+    <Button onClick={() => notificationExample('topLeft')}>topLeft</Button>
+    <Button onClick={() => notificationExample('topRight')}>topRight</Button>
+    <Button onClick={() => notificationExample('bottomLeft')}>
+      bottomLeft
+    </Button>
+    <Button onClick={() => notificationExample('bottomRight')}>
       bottomRight
     </Button>
   </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, message } from 'pq-antd';
 
-function messageExaple() {
+function messageExample() {
   message.loading({
     content: '寒江孤影',
     key: 'updateMessage',
@@ -13,6 +13,6 @@ function messageExaple() {
 
 export default () => (
   <div>
-    <Button onClick={messageExaple}>更新消息内容</Button>
+    <Button onClick={messageExample}>更新消息内容</Button>
   </div>
 );

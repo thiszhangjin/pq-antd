@@ -20,7 +20,7 @@ export interface ArgsProps {
   onClose?: () => void;
 }
 
-export interface notificationInstanceProps {
+export interface notificationApi {
   open: (args: ArgsProps) => void;
   success: (args: ArgsProps) => {};
   error: (args: ArgsProps) => {};
@@ -32,7 +32,7 @@ export interface notificationInstanceProps {
 
 export type NoticeType = 'info' | 'success' | 'error' | 'warning' | 'loading';
 
-enum notificationIcons {
+export enum notificationIcons {
   info = 'info-circle',
   success = 'check-circle',
   error = 'close-circle',
@@ -66,7 +66,7 @@ function getNotificationInstance(
   }
 }
 
-const notificationApi: any = {
+const api: any = {
   open: (args: ArgsProps): void => {
     const {
       message,
@@ -120,10 +120,9 @@ const notificationApi: any = {
 };
 
 ['info', 'success', 'error', 'warning', 'loading'].forEach(type => {
-  notificationApi[type] = (content: ArgsProps) => {
-    notificationApi.open({ ...content, type });
+  api[type] = (content: ArgsProps) => {
+    api.open({ ...content, type });
   };
 });
 
-const notification: notificationInstanceProps = notificationApi;
-export default notification;
+export default api as notificationApi;

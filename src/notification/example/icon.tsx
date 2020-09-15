@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, notification } from 'pq-antd';
 
-function notificationExaple(type: string) {
+function notificationExample(type: string) {
   notification[type]({
     message: type,
     description:
@@ -11,10 +11,10 @@ function notificationExaple(type: string) {
 
 export default () => (
   <div>
-    <Button onClick={() => notificationExaple('info')}>info</Button>
-    <Button onClick={() => notificationExaple('error')}>error</Button>
-    <Button onClick={() => notificationExaple('success')}>success</Button>
-    <Button onClick={() => notificationExaple('warning')}>warning</Button>
-    <Button onClick={() => notificationExaple('loading')}>loading</Button>
+    <Button onClick={() => notificationExample('info')}>info</Button>
+    <Button onClick={() => notificationExample('error')}>error</Button>
+    <Button onClick={() => notificationExample('success')}>success</Button>
+    <Button onClick={() => notificationExample('warning')}>warning</Button>
+    <Button onClick={() => notificationExample('loading')}>loading</Button>
   </div>
 );

@@ -26,7 +26,7 @@ export interface ArgsProps {
 
 export type jsonContent = string | ArgsProps;
 
-export interface messageProps {
+export interface messageApi {
   open: (args: ArgsProps) => void;
   success: (content: jsonContent, duration?: number, onClose?: () => {}) => {};
   error: (content: jsonContent, duration?: number, onClose?: () => {}) => {};
@@ -38,7 +38,7 @@ export interface messageProps {
 
 export type NoticeType = 'info' | 'success' | 'error' | 'warning' | 'loading';
 
-enum messageIcons {
+export enum messageIcons {
   info = 'info-circle',
   success = 'check-circle',
   error = 'close-circle',
@@ -46,7 +46,7 @@ enum messageIcons {
   loading = 'loading',
 }
 
-const messageApi: any = {
+const api: any = {
   open: (args: ArgsProps): void => {
     const { content, duration, type, icon, key, onClose } = args;
     const classes = classNames(`${prefixCls}-${type}`);
@@ -77,18 +77,17 @@ const messageApi: any = {
 };
 
 ['info', 'success', 'error', 'warning', 'loading'].forEach(type => {
-  messageApi[type] = (
+  api[type] = (
     content: jsonContent,
     duration: number = 3,
     onClose: () => {},
   ) => {
     if (typeof content === 'object') {
-      messageApi.open({ ...content, type });
+      api.open({ ...content, type });
     } else {
-      messageApi.open({ content, duration, type: type as NoticeType, onClose });
+      api.open({ content, duration, type: type as NoticeType, onClose });
     }
   };
 });
 
-const message: messageProps = messageApi;
-export default message;
+export default api as messageApi;

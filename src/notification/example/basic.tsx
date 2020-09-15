@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, notification } from 'pq-antd';
 
-function notificationExaple(
+function notificationExample(
   message: string,
   duration: number,
   showBtn?: boolean,
@@ -17,21 +17,15 @@ function notificationExaple(
 
 export default () => (
   <div>
-    <Button type="primary" onClick={() => notificationExaple('自动关闭', 4.5)}>
+    <Button onClick={() => notificationExample('自动关闭', 4.5)}>
       自动关闭
     </Button>
 
-    <Button
-      type="primary"
-      onClick={() => notificationExaple('不会自动关闭', 0)}
-    >
+    <Button onClick={() => notificationExample('不会自动关闭', 0)}>
       不会自动关闭
     </Button>
 
-    <Button
-      type="primary"
-      onClick={() => notificationExaple('带有按钮', 4.5, true)}
-    >
+    <Button onClick={() => notificationExample('带有按钮', 4.5, true)}>
       带有按钮
     </Button>
   </div>
