@@ -1,4 +1,6 @@
-# myAntd
+# pq-Antd
+
+基于react实现的类antd组件库
 
 在线地址 https://thiszhangjin.github.io/pq-antd
 
@@ -14,16 +16,4 @@ Start the dev server,
 
 ```bash
 $ npm start
-```
-
-Build documentation,
-
-```bash
-$ npm run docs:build
-```
-
-Build library via `father-build`,
-
-```bash
-$ npm run build
 ```
