@@ -1,5 +1,6 @@
 import React from 'react';
-import { Modal, Button } from 'pq-antd';
+import { Button, Modal } from 'pq-antd';
+// import {Modal} from 'antd';
 
 class App extends React.Component {
   state = { visible: false };
@@ -32,6 +33,7 @@ class App extends React.Component {
         </Button>
         <Modal
           title="Basic Modal"
+          forceRender
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -45,6 +47,4 @@ class App extends React.Component {
   }
 }
 
-export default () => (
-  <App />
-)
+export default () => <App />;
