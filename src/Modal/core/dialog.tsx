@@ -1,5 +1,8 @@
 import React from 'react';
-import classNames from 'classnames';
+import { Icon } from 'antd';
+import Mask from './mask';
+
+export type IStringOrHtmlElement = string | HTMLElement;
 
 export interface DialogProps {
   prefixCls?: string;
@@ -12,6 +15,9 @@ export interface DialogProps {
   closable?: boolean;
   mask?: boolean;
   maskClosable?: boolean;
+  forceRender?: boolean;
+  getContainer?: IStringOrHtmlElement | (() => IStringOrHtmlElement) | false;
+  children?: any;
   onClose?: () => void;
 }
 interface DialogState {}
@@ -23,45 +29,79 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
     super(props);
   }
 
+  static defaultProps = {
+    prefixCls: 'pq-antd-modal',
+    closable: true,
+    mask: true,
+    maskClosable: true,
+  };
+
   getDialogElement = () => {
-    const { bodyStyle, closable, title, footer, children } = this.props;
-    let headerNode;
-    let closer;
+    const {
+      prefixCls,
+      bodyStyle,
+      closable,
+      title,
+      footer,
+      children,
+    } = this.props;
+    let headerNode = null;
+    let closer = null;
     let footerNode = null;
     if (title) {
-      headerNode = <div>aaa</div>;
+      headerNode = <div className={`${prefixCls}-header`}>{title}</div>;
     }
 
     if (closable) {
-      closer = <div>dsmas</div>;
+      closer = (
+        <button
+          type="button"
+          className={`${prefixCls}-closer`}
+          onClick={this.handleClose}
+        >
+          <Icon type="close" />
+        </button>
+      );
     }
 
     if (footer) {
-      footerNode = <div>adsadsasd</div>;
+      footerNode = <div className={`${prefixCls}-footer`}>{footer}</div>;
     }
 
     return (
-      <div>
+      <div className={`${prefixCls}`} style={bodyStyle}>
         {headerNode}
         {closer}
+        <div className={`${prefixCls}-body`}>{children}</div>
         {footerNode}
       </div>
     );
   };
 
+  handleMaskClick = (e: React.MouseEvent) => {
+    const { maskClosable } = this.props;
+    if (maskClosable && e.target === e.currentTarget) {
+      this.handleClose();
+    }
+  };
+
+  handleClose = () => {
+    const { onClose } = this.props;
+    if (onClose) {
+      onClose();
+    }
+  };
+
   render(): React.ReactNode {
-    const {
-      prefixCls = 'pq-antd',
-      className,
-      closable,
-      ...others
-    } = this.props;
-    const classes = classNames(`${prefixCls}-dialog`, className);
+    const { prefixCls, visible, mask } = this.props;
     return (
-      <div className={`${prefixCls}-dialog-root`}>
-        <div className={`${prefixCls}-dialog-mask`} />
-        <div className={`${prefixCls}-dialog-wapper`}>
-          <div className={classes}>{this.getDialogElement}</div>
+      <div
+        className={`${prefixCls}-root`}
+        style={{ display: visible ? 'block' : 'none' }}
+      >
+        {mask && <Mask prefixCls={prefixCls} />}
+        <div className={`${prefixCls}-wapper`} onClick={this.handleMaskClick}>
+          {this.getDialogElement()}
         </div>
       </div>
     );

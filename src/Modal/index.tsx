@@ -1,4 +1,4 @@
-import Modal from './core/dialog';
+import DialogWrap from './core/dialogWrap';
 import './style/index.less';
 
-export default Modal;
+export default DialogWrap;

@@ -1,6 +1,6 @@
 @import '../../style/default.less';
 
-@modal: ~'@{prefix}-dialog';
+@modal: ~'@{prefix}-modal';
 
 .positionFixed() {
   position: fixed;
@@ -24,10 +24,52 @@
 
     .@{modal} {
       width: 500px;
-      height: 300px;
       background: #fff;
       margin: 50px auto;
       border-radius: 3px;
+      position: relative;
+
+      &-header {
+        padding: 16px 24px;
+        color: rgba(0, 0, 0, 0.65);
+        background: #fff;
+        border-bottom: 1px solid #e8e8e8;
+        border-radius: 4px 4px 0 0;
+      }
+
+      &-closer {
+        width: 57px;
+        height: 57px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 10;
+        padding: 0;
+        color: rgba(0, 0, 0, 0.45);
+        font-weight: 700;
+        line-height: 1;
+        text-decoration: none;
+        background: 0 0;
+        border: 0;
+        outline: 0;
+        cursor: pointer;
+        -webkit-transition: color 0.3s;
+        transition: color 0.3s;
+      }
+
+      &-body {
+        padding: 24px;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      &-footer {
+        padding: 10px 16px;
+        text-align: right;
+        background: 0 0;
+        border-top: 1px solid #e8e8e8;
+        border-radius: 0 0 4px 4px;
+      }
     }
   }
 }

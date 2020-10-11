@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal } from 'pq-antd';
+import { Button, Modal } from '../../index';
 // import {Modal} from 'antd';
 
 class App extends React.Component {
@@ -11,15 +11,7 @@ class App extends React.Component {
     });
   };
 
-  handleOk = e => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  };
-
-  handleCancel = e => {
-    console.log(e);
+  handleCancel = () => {
     this.setState({
       visible: false,
     });
@@ -32,11 +24,11 @@ class App extends React.Component {
           Open Modal
         </Button>
         <Modal
-          title="Basic Modal"
-          forceRender
           visible={this.state.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
+          title="Basic Modal"
+          footer={<Button type="primary">ok</Button>}
+          onClose={this.handleCancel}
+          forceRender
         >
           <p>Some contents...</p>
           <p>Some contents...</p>
