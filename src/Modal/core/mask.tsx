@@ -3,7 +3,8 @@ import React from 'react';
 export interface MaskProps {
   prefixCls?: string;
   style?: React.CSSProperties;
-  onClick?: () => void;
+  visible?: boolean;
+  maskRef?: React.RefObject<HTMLDivElement>;
 }
 interface MaskState {}
 
@@ -18,20 +19,14 @@ export default class Mask extends React.Component<MaskProps, MaskState> {
     prefixCls: 'pq-antd-modal',
   };
 
-  handleClick = () => {
-    const { onClick } = this.props;
-    if (onClick) {
-      onClick();
-    }
-  };
-
   render(): React.ReactNode {
-    const { prefixCls, style } = this.props;
+    const { prefixCls, style, maskRef, ...restProps } = this.props;
     return (
       <div
         style={style}
         className={`${prefixCls}-mask`}
-        onClick={this.handleClick}
+        ref={maskRef}
+        {...restProps}
       />
     );
   }

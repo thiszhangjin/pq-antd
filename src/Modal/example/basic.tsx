@@ -28,7 +28,7 @@ class App extends React.Component {
           title="Basic Modal"
           footer={<Button type="primary">ok</Button>}
           onClose={this.handleCancel}
-          forceRender
+          // forceRender
         >
           <p>Some contents...</p>
           <p>Some contents...</p>
