@@ -8,6 +8,7 @@ export type IStringOrHtmlElement = string | HTMLElement;
 
 export interface DialogProps {
   prefixCls?: string;
+  style?: React.CSSProperties;
   wrapStyle?: React.CSSProperties;
   bodyStyle?: React.CSSProperties;
   maskStyle?: React.CSSProperties;
@@ -61,6 +62,10 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
 
   componentDidMount() {
     this.componentDidUpdate({});
+    if (!this.props.visible) {
+      this.wrapper.current!.style.display = 'none';
+      this.mask.current!.style.display = 'none';
+    }
   }
 
   componentDidUpdate(prevProps: DialogProps) {
@@ -135,6 +140,7 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
 
   getDialogElement = () => {
     const {
+      style,
       className,
       prefixCls,
       bodyStyle,
@@ -169,7 +175,9 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
       footerNode = <div className={`${prefixCls}-footer`}>{footer}</div>;
     }
 
-    const boxStyle: React.CSSProperties = {};
+    const boxStyle: React.CSSProperties = {
+      ...style,
+    };
     if (width !== undefined) {
       boxStyle.width = width;
     }

@@ -25,9 +25,10 @@
     .@{modal} {
       width: 500px;
       background: #fff;
-      margin: 50px auto;
+      margin: 0px auto;
       border-radius: 3px;
       position: relative;
+      top: 150px;
 
       &-header {
         padding: 16px 24px;
@@ -69,6 +70,47 @@
         border-top: 1px solid #e8e8e8;
         border-radius: 0 0 4px 4px;
       }
+    }
+  }
+
+  &-confirm {
+    .anticon {
+      float: left;
+      width: 50px;
+      font-size: 20px;
+      color: @color-primary;
+
+      &-check-circle {
+        color: @color-success;
+      }
+
+      &-close-circle {
+        color: @color-danger;
+      }
+
+      &-exclamation-circle {
+        color: @color-warning;
+      }
+    }
+
+    &-title {
+      display: block;
+      overflow: hidden;
+      color: rgba(0, 0, 0, 0.85);
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 20px;
+    }
+    &-content {
+      margin: 8px 0 0 50px;
+      color: rgba(0, 0, 0, 0.65);
+      font-size: 14px;
+    }
+
+    &-btns {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
     }
   }
 
