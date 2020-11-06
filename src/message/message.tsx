@@ -11,7 +11,7 @@ Notification.newInstance(
     messageInstance = instance;
   },
   {
-    prefixCls: prefixCls,
+    prefixCls,
   },
 );
 
@@ -24,21 +24,21 @@ export interface ArgsProps {
   onClose?: () => void;
 }
 
-export type jsonContent = string | ArgsProps;
+export type JsonContent = string | ArgsProps;
 
-export interface messageApi {
+export interface MessageApi {
   open: (args: ArgsProps) => void;
-  success: (content: jsonContent, duration?: number, onClose?: () => {}) => {};
-  error: (content: jsonContent, duration?: number, onClose?: () => {}) => {};
-  info: (content: jsonContent, duration?: number, onClose?: () => {}) => {};
-  warning: (content: jsonContent, duration?: number, onClose?: () => {}) => {};
-  loading: (content: jsonContent, duration?: number, onClose?: () => {}) => {};
+  success: (content: JsonContent, duration?: number, onClose?: () => {}) => {};
+  error: (content: JsonContent, duration?: number, onClose?: () => {}) => {};
+  info: (content: JsonContent, duration?: number, onClose?: () => {}) => {};
+  warning: (content: JsonContent, duration?: number, onClose?: () => {}) => {};
+  loading: (content: JsonContent, duration?: number, onClose?: () => {}) => {};
   [index: string]: any;
 }
 
 export type NoticeType = 'info' | 'success' | 'error' | 'warning' | 'loading';
 
-export enum messageIcons {
+export enum MessageIcons {
   info = 'info-circle',
   success = 'check-circle',
   error = 'close-circle',
@@ -54,7 +54,7 @@ const api: any = {
     if (type) {
       iconNode = (
         <Icon
-          type={messageIcons[type]}
+          type={MessageIcons[type]}
           theme={type === 'loading' ? 'outlined' : 'filled'}
         />
       );
@@ -71,14 +71,14 @@ const api: any = {
       ),
       duration,
       key,
-      onClose: onClose,
+      onClose,
     });
   },
 };
 
 ['info', 'success', 'error', 'warning', 'loading'].forEach(type => {
   api[type] = (
-    content: jsonContent,
+    content: JsonContent,
     duration: number = 3,
     onClose: () => {},
   ) => {
@@ -90,4 +90,4 @@ const api: any = {
   };
 });
 
-export default api as messageApi;
+export default api as MessageApi;

@@ -3,7 +3,7 @@ import { Icon } from 'antd';
 import classNames from 'classnames';
 import Notification, {
   NotificationProps,
-  placementType,
+  PlacementType,
 } from './core/notification';
 
 const prefixCls: string = 'pq-antd-notification';
@@ -15,12 +15,12 @@ export interface ArgsProps {
   type?: NoticeType;
   icon?: React.ReactNode;
   btn?: React.ReactNode;
-  placement?: placementType;
+  placement?: PlacementType;
   key?: string | number;
   onClose?: () => void;
 }
 
-export interface notificationApi {
+export interface NotificationApi {
   open: (args: ArgsProps) => void;
   success: (args: ArgsProps) => {};
   error: (args: ArgsProps) => {};
@@ -32,7 +32,7 @@ export interface notificationApi {
 
 export type NoticeType = 'info' | 'success' | 'error' | 'warning' | 'loading';
 
-export enum notificationIcons {
+export enum NotificationIcons {
   info = 'info-circle',
   success = 'check-circle',
   error = 'close-circle',
@@ -85,7 +85,7 @@ const api: any = {
     const classes = classNames(`${prefixCls}-${type}`);
     let iconNode = icon;
     if (type) {
-      iconNode = <Icon type={notificationIcons[type]} />;
+      iconNode = <Icon type={NotificationIcons[type]} />;
     }
     getNotificationInstance(
       {
@@ -112,7 +112,7 @@ const api: any = {
           duration,
           key,
           closable: true,
-          onClose: onClose,
+          onClose,
         });
       },
     );
@@ -125,4 +125,4 @@ const api: any = {
   };
 });
 
-export default api as notificationApi;
+export default api as NotificationApi;

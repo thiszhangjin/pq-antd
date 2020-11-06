@@ -1,34 +1,34 @@
 import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import Notice, { NoticeProps } from './notice';
 import Animate from 'rc-animate';
+import Notice, { NoticeProps } from './notice';
 
 export interface NotificationProps {
   prefixCls: string;
   style?: React.CSSProperties;
-  placement?: placementType;
+  placement?: PlacementType;
 }
 
-export type placementType =
+export type PlacementType =
   | 'topLeft'
   | 'topRight'
   | 'bottomLeft'
   | 'bottomRight';
 
-interface noticeDataProps extends NoticeProps {
+interface NoticeDataProps extends NoticeProps {
   key: number | string;
   content: string | ReactNode;
 }
 
 interface IState {
-  NoticeList: noticeDataProps[];
+  NoticeList: NoticeDataProps[];
 }
 
 let count: number = 0;
 function getKey(): string {
-  count++;
-  return new Date().getTime() + '' + count;
+  count += 1;
+  return `${new Date().getTime()}${count}`;
 }
 
 export default class Notification extends React.Component<
@@ -36,6 +36,7 @@ export default class Notification extends React.Component<
   IState
 > {
   static newInstance: any;
+
   public readonly state: Readonly<IState> = {
     NoticeList: [],
   };
@@ -52,7 +53,7 @@ export default class Notification extends React.Component<
     },
   };
 
-  add = (noticeData: noticeDataProps) => {
+  add = (noticeData: NoticeDataProps) => {
     const { key } = noticeData;
     const { NoticeList } = this.state;
     noticeData.key = key || getKey();
@@ -83,7 +84,7 @@ export default class Notification extends React.Component<
     const classes = classNames(`${prefixCls}-notification`, {
       [`${prefixCls}-notification-${placement}`]: placement,
     });
-    let renderNode = NoticeList.map(item => {
+    const renderNode = NoticeList.map(item => {
       const { key, content, onClose, ...others } = item;
       const noticeProps: NoticeProps = {
         prefixCls,
@@ -114,8 +115,8 @@ Notification.newInstance = function(
   node.className = `${NotificationProps.prefixCls}`;
   document.body.appendChild(node);
 
-  function ref(Notification: Notification) {
-    newInstanceFun(Notification);
+  function ref(NotificationInstance: Notification) {
+    newInstanceFun(NotificationInstance);
   }
 
   ReactDOM.render(<Notification ref={ref} {...NotificationProps} />, node);

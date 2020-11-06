@@ -19,6 +19,7 @@ interface NoticeState {
 
 export default class Notice extends React.Component<NoticeProps, NoticeState> {
   public timer: number | null = null;
+
   public readonly state: Readonly<NoticeState> = {
     duration: 0,
   };
@@ -27,7 +28,7 @@ export default class Notice extends React.Component<NoticeProps, NoticeState> {
     super(props);
   }
 
-  static getDerivedStateFromProps(props: NoticeProps, state: NoticeState) {
+  static getDerivedStateFromProps(props: NoticeProps) {
     return {
       duration: props.duration,
     };
@@ -79,8 +80,8 @@ export default class Notice extends React.Component<NoticeProps, NoticeState> {
       <div className={classes} {...others}>
         <div
           className={`${prefixCls}-notice-content`}
-          onMouseMove={this.resetCloseTimer}
-          onMouseOut={this.startCloseTimer}
+          onMouseEnter={this.resetCloseTimer}
+          onMouseLeave={this.startCloseTimer}
         >
           {children}
         </div>

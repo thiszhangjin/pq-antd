@@ -21,5 +21,6 @@ module.exports = {
     'space-before-blocks': ['error', 'always'],
     'arrow-spacing': 'error',
     'space-infix-ops': ['error', { int32Hint: false }],
+    'no-param-reassign': ['error', { props: false }],
   },
 };

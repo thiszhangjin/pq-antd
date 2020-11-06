@@ -30,6 +30,7 @@ interface IState {
 
 export default class Button extends React.Component<IProps, IState> {
   static Group: typeof Group;
+
   public readonly state: Readonly<IState> = {
     prefixCls: 'pq-antd',
   };
@@ -67,7 +68,12 @@ export default class Button extends React.Component<IProps, IState> {
       },
       className,
     );
-
+    let iconNode = null;
+    if (loading) {
+      iconNode = <Icon type="loading" />;
+    } else if (icon) {
+      iconNode = <Icon type={icon} />;
+    }
     return (
       <button
         type="button"
@@ -76,7 +82,7 @@ export default class Button extends React.Component<IProps, IState> {
         onClick={this.handleClick}
         disabled={disabled}
       >
-        {loading ? <Icon type="loading" /> : icon ? <Icon type={icon} /> : ''}
+        {iconNode}
         {children ? <span>{children}</span> : ''}
       </button>
     );
