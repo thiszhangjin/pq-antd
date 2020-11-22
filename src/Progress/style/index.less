@@ -1,0 +1,12 @@
+@import '../../style/default.less';
+
+@modal: ~'@{prefix}-modal';
+
+.ant-progress-circle-path {
+  // stroke-linecap: round;
+  stroke-dashoffset: 0px;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  transition: stroke-dashoffset 0.3s ease 0s, stroke-dasharray 0.3s ease 0s,
+    stroke 0.3s ease 0s, stroke-width 0.06s ease 0.3s;
+}
