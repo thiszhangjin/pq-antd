@@ -1,12 +1,50 @@
 @import '../../style/default.less';
 
-@modal: ~'@{prefix}-modal';
+@progress: ~'@{prefix}-progress';
 
-.ant-progress-circle-path {
-  // stroke-linecap: round;
-  stroke-dashoffset: 0px;
-  transform: rotate(-90deg);
-  transform-origin: center;
-  transition: stroke-dashoffset 0.3s ease 0s, stroke-dasharray 0.3s ease 0s,
-    stroke 0.3s ease 0s, stroke-width 0.06s ease 0.3s;
+.@{progress} {
+  position: relative;
+
+  &-circle {
+    &-path {
+      stroke: @color-primary;
+      stroke-dashoffset: 0px;
+      transform: rotate(-90deg);
+      transform-origin: center;
+      transition: stroke 0.3s ease 0s, stroke-dashoffset 0.3s ease 0s,
+        stroke-dasharray 0.3s ease 0s, stroke 0.3s ease 0s,
+        stroke-width 0.06s ease 0.3s;
+    }
+    &-info {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(0, 0, 0, 0.65);
+      font-size: 24px;
+      transition: all 0.3s ease 0s;
+    }
+  }
+
+  &-success {
+    .@{progress}-circle {
+      &-path {
+        stroke: @color-success;
+      }
+      &-info {
+        color: @color-success;
+      }
+    }
+  }
+
+  &-exception {
+    .@{progress}-circle {
+      &-path {
+        stroke: @color-danger;
+      }
+      &-info {
+        color: @color-danger;
+      }
+    }
+  }
 }

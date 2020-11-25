@@ -1,19 +1,22 @@
 import React from 'react';
 import Circle from './Circle';
 
-export type IStringOrHtmlElement = string | Element;
-
 export interface ProgressProps {
+  prefixCls?: string;
+  className?: string;
   type?: 'line' | 'circle';
   percent?: number;
   showInfo?: boolean;
-  status?: string;
+  status?: 'success' | 'exception' | 'normal' | 'active';
   strokeLinecap?: 'round' | 'square';
   strokeColor?: string;
   successPercent?: number;
   width: number;
   strokeWidth: number;
-  format?: (percent: number, successPercent: number) => IStringOrHtmlElement;
+  format?: (
+    percent: number,
+    successPercent: number,
+  ) => string | React.ReactNode;
 }
 
 interface ProgressState {}
@@ -29,6 +32,7 @@ export default class Progress extends React.Component<
   }
 
   static defaultProps = {
+    prefixCls: 'pq-antd-progress',
     type: 'line',
     strokeLinecap: 'round',
     percent: 0,
