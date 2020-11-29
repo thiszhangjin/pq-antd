@@ -1,5 +1,5 @@
 import React from 'react';
-import { Progress, Button } from '../../index';
+import { Progress, Button } from 'pq-antd';
 
 class App extends React.Component {
   state = {
@@ -23,6 +23,11 @@ class App extends React.Component {
     return (
       <div>
         <Progress type="circle" percent={this.state.percent} />
+        <Progress
+          type="line"
+          percent={this.state.percent}
+          style={{ margin: '20px 0' }}
+        />
         <Button.Group>
           <Button icon="minus" onClick={() => this.handleChangePercent(-30)} />
           <Button icon="plus" onClick={() => this.handleChangePercent(30)} />

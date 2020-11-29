@@ -1,5 +1,6 @@
 import React from 'react';
 import Circle from './Circle';
+import Line from './Line';
 
 export interface ProgressProps {
   prefixCls?: string;
@@ -11,8 +12,9 @@ export interface ProgressProps {
   strokeLinecap?: 'round' | 'square';
   strokeColor?: string;
   successPercent?: number;
-  width: number;
-  strokeWidth: number;
+  width?: number;
+  strokeWidth?: number;
+  style?: React.CSSProperties;
   format?: (
     percent: number,
     successPercent: number,
@@ -38,14 +40,15 @@ export default class Progress extends React.Component<
     percent: 0,
     showInfo: true,
     successPercent: 0,
-    width: 132,
-    strokeWidth: 6,
   };
 
   renderProgress = (): React.ReactNode => {
     const { type } = this.props;
     if (type === 'circle') {
       return <Circle {...this.props} />;
+    }
+    if (type === 'line') {
+      return <Line {...this.props} />;
     }
     return <div />;
   };

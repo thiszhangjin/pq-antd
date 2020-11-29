@@ -3,8 +3,6 @@ import classNames from 'classnames';
 import { Icon } from 'antd';
 import { ProgressProps } from './progress';
 
-export type IStringOrHtmlElement = string | HTMLElement;
-
 export interface CircleProps extends ProgressProps {}
 
 interface CircleState {}
@@ -34,13 +32,14 @@ export default class Circle extends React.Component<CircleProps, CircleState> {
   render() {
     const {
       prefixCls,
-      width,
-      strokeWidth,
+      width = 132,
+      strokeWidth = 6,
       strokeColor,
       percent = 0,
       status,
       showInfo,
       className,
+      style,
     } = this.props;
     const cx = width / 2;
     const r = cx - strokeWidth;
@@ -56,7 +55,7 @@ export default class Circle extends React.Component<CircleProps, CircleState> {
     );
 
     return (
-      <div className={classes} style={{ width, height: width }}>
+      <div className={classes} style={{ width, height: width, ...style }}>
         <svg
           className={`${prefixCls}-circle`}
           viewBox={`0 0 ${width} ${width}`}
