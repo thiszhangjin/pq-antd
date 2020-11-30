@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import Menu from './Menu';
 import PopupMenu from './PopupMenu';
+
 export interface SubMenuProps {
   prefixCls?: string;
   className?: string;
@@ -12,13 +12,17 @@ export interface SubMenuProps {
   title?: string | React.ReactNode;
   onTitleClick?: () => void;
 }
-interface SubMenuState {}
+interface SubMenuState {
+  PopupMenuVisible: boolean;
+}
 
 export default class SubMenu extends React.Component<
   SubMenuProps,
   SubMenuState
 > {
-  public readonly state: Readonly<SubMenuState> = {};
+  public readonly state: Readonly<SubMenuState> = {
+    PopupMenuVisible: false,
+  };
 
   public constructor(props: SubMenuProps) {
     super(props);
@@ -28,13 +32,29 @@ export default class SubMenu extends React.Component<
     prefixCls: 'pq-antd-menu',
   };
 
+  private subMenuRef = React.createRef<HTMLDivElement>();
+
+  onMouseAction = (visible: boolean) => {
+    this.setState({
+      PopupMenuVisible: visible,
+    });
+  };
+
   render() {
     const { prefixCls, className, title, children } = this.props;
+    const { PopupMenuVisible } = this.state;
     const classes = classNames(`${prefixCls}-submenu`, className);
     return (
-      <li className={classes}>
+      <li
+        className={classes}
+        ref={this.subMenuRef}
+        onMouseEnter={() => this.onMouseAction(true)}
+        onMouseLeave={() => this.onMouseAction(false)}
+      >
         <div className={`${prefixCls}-submenu-title`}>{title}</div>
-        <PopupMenu>{children}</PopupMenu>
+        <PopupMenu visible={PopupMenuVisible} parentNode={this.subMenuRef}>
+          {children}
+        </PopupMenu>
       </li>
     );
   }

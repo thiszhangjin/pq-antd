@@ -65,7 +65,7 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
   };
 
   render() {
-    const { prefixCls, mode, theme, className, children } = this.props;
+    const { prefixCls, mode, theme, className, children, style } = this.props;
     const classes = classNames(
       prefixCls,
       {
@@ -74,6 +74,10 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
       },
       className,
     );
-    return <ul className={classes}>{children}</ul>;
+    return (
+      <ul className={classes} style={style}>
+        {children}
+      </ul>
+    );
   }
 }

@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 export interface PopupMenuProps {
   prefixCls?: string;
   className?: string;
+  visible?: boolean;
+  parentNode?: React.RefObject<HTMLDivElement>;
   children?: [];
 }
 interface PopupMenuState {}
@@ -17,28 +20,67 @@ export default class PopupMenu extends React.Component<
     super(props);
   }
 
-  targetElement: Element = this.createContainer();
+  targetElement: Element | null = null;
 
   static defaultProps = {
     prefixCls: 'pq-antd-menu',
+    visible: false,
   };
 
-  createContainer() {
+  componentDidMount() {}
+
+  createContainer = (): Element => {
     let containerNode = document.getElementById('triggerContainer');
-    //已经存在container
     if (!containerNode) {
       containerNode = document.createElement('div');
       containerNode.id = 'triggerContainer';
-      containerNode.style.top = '0';
-      containerNode.style.left = '0';
-      containerNode.style.width = '100%';
-      containerNode.style.position = 'absolute';
+      document.body.appendChild(containerNode);
     }
     return containerNode;
-  }
+  };
+
+  getLocation = (element: HTMLDivElement): { top: number; left: number } => {
+    let left = 0;
+    let top = 0;
+
+    const { offsetLeft, offsetTop, offsetHeight } = element;
+
+    left = offsetLeft;
+    top = offsetTop + offsetHeight;
+
+    return {
+      left,
+      top,
+    };
+  };
+
+  renderMenu = () => {
+    const { prefixCls, children, visible, parentNode } = this.props;
+
+    const targetStyle: React.CSSProperties = {
+      display: visible ? 'block' : 'none',
+    };
+
+    const element: HTMLDivElement | null | undefined = parentNode?.current;
+    if (element) {
+      const { top, left } = this.getLocation(element);
+      targetStyle.top = top;
+      targetStyle.left = left;
+      targetStyle.width = element.offsetWidth;
+    }
+
+    return (
+      <div className={`${prefixCls}-sub`} style={targetStyle}>
+        {children}
+      </div>
+    );
+  };
 
   render() {
     const { prefixCls, children } = this.props;
-    return ReactDOM.createPortal(this.props.children, this.targetElement);
+    if (!this.targetElement) {
+      this.targetElement = this.createContainer();
+    }
+    return ReactDOM.createPortal(this.renderMenu(), this.targetElement);
   }
 }
