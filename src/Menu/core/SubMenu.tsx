@@ -1,15 +1,17 @@
 import React from 'react';
 import classNames from 'classnames';
 import PopupMenu from './PopupMenu';
+import { MenuMode } from './Menu';
 
 export interface SubMenuProps {
   prefixCls?: string;
   className?: string;
   popupClassName?: string;
-  children?: [];
+  children?: React.ReactNode;
   disabled?: boolean;
   key?: string;
   title?: string | React.ReactNode;
+  mode?: MenuMode;
   onTitleClick?: () => void;
 }
 interface SubMenuState {
@@ -36,14 +38,34 @@ export default class SubMenu extends React.Component<
 
   onMouseAction = (visible: boolean) => {
     this.setState({
-      PopupMenuVisible: visible,
+      PopupMenuVisible: true,
     });
   };
 
+  getChildren = (): React.ReactNode => {
+    const { children } = this.props;
+    if (children) {
+      // @ts-ignore
+      return React.Children.map(children, item =>
+        React.cloneElement(item, {
+          mode: 'vertical',
+        }),
+      );
+    }
+    return <div />;
+  };
+
   render() {
-    const { prefixCls, className, title, children } = this.props;
+    const { prefixCls, className, title, mode, children } = this.props;
     const { PopupMenuVisible } = this.state;
-    const classes = classNames(`${prefixCls}-submenu`, className);
+    const classes = classNames(
+      prefixCls,
+      `${prefixCls}-submenu`,
+      {
+        [`${prefixCls}-vertical`]: true,
+      },
+      className,
+    );
     return (
       <li
         className={classes}
@@ -52,8 +74,12 @@ export default class SubMenu extends React.Component<
         onMouseLeave={() => this.onMouseAction(false)}
       >
         <div className={`${prefixCls}-submenu-title`}>{title}</div>
-        <PopupMenu visible={PopupMenuVisible} parentNode={this.subMenuRef}>
-          {children}
+        <PopupMenu
+          visible={PopupMenuVisible}
+          parentNode={this.subMenuRef}
+          mode={mode}
+        >
+          {this.getChildren()}
         </PopupMenu>
       </li>
     );
