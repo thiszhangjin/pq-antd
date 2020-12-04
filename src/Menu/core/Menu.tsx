@@ -64,8 +64,21 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
     theme: 'light',
   };
 
+  getChildren = (): React.ReactNode => {
+    const { children, mode } = this.props;
+    if (children) {
+      // @ts-ignore
+      return React.Children.map(children, item =>
+        React.cloneElement(item, {
+          mode,
+        }),
+      );
+    }
+    return <div />;
+  };
+
   render() {
-    const { prefixCls, mode, theme, className, children, style } = this.props;
+    const { prefixCls, mode, theme, className, style } = this.props;
     const classes = classNames(
       prefixCls,
       {
@@ -76,7 +89,7 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
     );
     return (
       <ul className={classes} style={style}>
-        {children}
+        {this.getChildren()}
       </ul>
     );
   }

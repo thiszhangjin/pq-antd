@@ -39,10 +39,19 @@ class App extends React.Component {
             <Icon type="mail" />
             Navigation One
           </Menu.Item>
-          <Menu.Item key="app" disabled>
-            <Icon type="appstore" />
-            Navigation Two
-          </Menu.Item>
+          <SubMenu
+            title={
+              <span className="submenu-title-wrapper">
+                <Icon type="setting" />
+                Submenu
+              </span>
+            }
+          >
+            <Menu.Item key="app" disabled>
+              <Icon type="appstore" />
+              Navigation
+            </Menu.Item>
+          </SubMenu>
         </SubMenu>
         <SubMenu
           title={

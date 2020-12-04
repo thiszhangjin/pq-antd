@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { MenuMode } from './Menu';
 
 export interface PopupMenuProps {
   prefixCls?: string;
   className?: string;
   visible?: boolean;
   parentNode?: React.RefObject<HTMLDivElement>;
-  children?: [];
+  mode?: MenuMode;
+  children?: React.ReactNode;
 }
 interface PopupMenuState {}
 
@@ -40,16 +42,17 @@ export default class PopupMenu extends React.Component<
   };
 
   getLocation = (element: HTMLDivElement): { top: number; left: number } => {
-    let left = 0;
-    let top = 0;
-
-    const { offsetLeft, offsetTop, offsetHeight } = element;
-
-    left = offsetLeft;
-    top = offsetTop + offsetHeight;
+    const { mode } = this.props;
+    const { top, left, width, height } = element.getBoundingClientRect();
+    if (mode === 'horizontal') {
+      return {
+        left,
+        top: top + height,
+      };
+    }
 
     return {
-      left,
+      left: left + width,
       top,
     };
   };
