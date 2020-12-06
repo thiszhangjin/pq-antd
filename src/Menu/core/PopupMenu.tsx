@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 import { MenuMode } from './Menu';
 
 export interface PopupMenuProps {
@@ -17,10 +18,6 @@ export default class PopupMenu extends React.Component<
   PopupMenuState
 > {
   public readonly state: Readonly<PopupMenuState> = {};
-
-  public constructor(props: PopupMenuProps) {
-    super(props);
-  }
 
   targetElement: Element | null = null;
 
@@ -71,9 +68,11 @@ export default class PopupMenu extends React.Component<
       targetStyle.left = left;
       targetStyle.width = element.offsetWidth;
     }
-
+    const classes = classNames(prefixCls, `${prefixCls}-sub`, {
+      [`${prefixCls}-vertical`]: true,
+    });
     return (
-      <div className={`${prefixCls}-sub`} style={targetStyle}>
+      <div className={classes} style={targetStyle}>
         {children}
       </div>
     );

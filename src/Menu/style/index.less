@@ -2,17 +2,6 @@
 
 @menu: ~'@{prefix}-menu';
 
-.menuItem {
-  margin: 0;
-  padding: 0 20px;
-  white-space: nowrap;
-  cursor: pointer;
-
-  .anticon {
-    padding-right: 10px;
-  }
-}
-
 #triggerContainer {
   position: absolute;
   z-index: 999;
@@ -21,24 +10,34 @@
 }
 
 .@{menu} {
+  white-space: nowrap;
+  border: 0;
+  box-shadow: none;
   &-horizontal {
-    line-height: 48px;
-    white-space: nowrap;
-    border: 0;
+    height: 48px;
     border-bottom: 1px solid #e8e8e8;
-    box-shadow: none;
     .@{menu}-item {
-      .menuItem();
       display: inline-block;
     }
     .@{menu}-submenu {
-      .menuItem();
       display: inline-block;
-
-      .@{menu} {
-        display: none;
-      }
     }
+  }
+  &-vertical {
+    .@{menu}-item {
+      width: 100%;
+    }
+  }
+  &-item,
+  &-submenu {
+    line-height: 48px;
+    margin: 0;
+    padding: 0 20px;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .anticon {
+    padding-right: 10px;
   }
 }
 .@{menu}-sub {
@@ -46,6 +45,6 @@
   left: 800px;
   width: 200px;
   position: absolute;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   background: #fff;
 }

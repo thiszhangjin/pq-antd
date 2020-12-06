@@ -26,10 +26,6 @@ export default class SubMenu extends React.Component<
     PopupMenuVisible: false,
   };
 
-  public constructor(props: SubMenuProps) {
-    super(props);
-  }
-
   static defaultProps = {
     prefixCls: 'pq-antd-menu',
   };
@@ -38,7 +34,7 @@ export default class SubMenu extends React.Component<
 
   onMouseAction = (visible: boolean) => {
     this.setState({
-      PopupMenuVisible: true,
+      PopupMenuVisible: visible,
     });
   };
 
