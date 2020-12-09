@@ -10,6 +10,12 @@
   left: 0;
 }
 
+.placement-before() {
+  content: '';
+  display: block;
+  position: absolute;
+}
+
 .@{menu} {
   white-space: nowrap;
   border: 0;
@@ -37,26 +43,34 @@
     white-space: nowrap;
     cursor: pointer;
   }
-  &-bottom-left {
-    transform: translateY(@popup-menu-spacing);
-    &::before {
-      content: '';
-      width: 100%;
-      display: block;
-      height: @popup-menu-spacing;
-      position: absolute;
-      top: -@popup-menu-spacing;
+  &-placement {
+    &-bottom-left,
+    &-bottom-right {
+      transform: translateY(@popup-menu-spacing);
+      &::before {
+        .placement-before();
+        width: 100%;
+        height: @popup-menu-spacing;
+        top: -@popup-menu-spacing;
+      }
     }
-  }
-  &-right-top {
-    transform: translateX(@popup-menu-spacing);
-    &::before {
-      content: '';
-      width: 3px;
-      height: 100%;
-      display: block;
-      position: absolute;
-      left: -3px;
+    &-right-top {
+      transform: translateX(@popup-menu-spacing);
+      &::before {
+        .placement-before();
+        width: 3px;
+        height: 100%;
+        left: -3px;
+      }
+    }
+    &-left-top {
+      transform: translateX(-@popup-menu-spacing);
+      &::before {
+        .placement-before();
+        width: 3px;
+        height: 100%;
+        right: -3px;
+      }
     }
   }
   .anticon {
@@ -66,7 +80,7 @@
 .@{menu}-sub {
   min-width: 200px;
   position: absolute;
+  z-index: 999;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   background: #fff;
-  // position: relative;
 }

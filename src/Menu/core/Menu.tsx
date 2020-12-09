@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import MenuItem from './MenuItem';
 import SubMenu from './SubMenu';
+import DomWrap from './DomWrap';
 
 export type MenuTheme = 'light' | 'dark';
 
@@ -88,9 +89,9 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
       className,
     );
     return (
-      <ul className={classes} style={style}>
+      <DomWrap className={classes} style={style}>
         {this.getChildren()}
-      </ul>
+      </DomWrap>
     );
   }
 }

@@ -63,7 +63,7 @@ class App extends React.Component {
         >
           <Menu.Item key="app" disabled>
             <Icon type="appstore" />
-            Navigation
+            Navigation Navigation Navigation
           </Menu.Item>
         </SubMenu>
       </Menu>

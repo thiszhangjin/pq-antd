@@ -30,10 +30,9 @@ export default class SubMenu extends React.Component<
     prefixCls: 'pq-antd-menu',
   };
 
-  private subMenuRef = React.createRef<HTMLDivElement>();
+  private subMenuRef = React.createRef<HTMLLIElement>();
 
   onMouseAction = (visible: boolean) => {
-    console.log(visible);
     this.setState({
       PopupMenuVisible: visible,
     });

@@ -43,7 +43,9 @@ export default class PopupMenu extends React.Component<
 
   targetElement: Element | null = null;
 
-  menuRef = React.createRef<HTMLDivElement>();
+  menuRef = React.createRef<HTMLUListElement>();
+
+  placementClassName: string = '';
 
   static defaultProps = {
     prefixCls: 'pq-antd-menu',
@@ -92,34 +94,34 @@ export default class PopupMenu extends React.Component<
     }
   };
 
-  createContainer = (): Element => {
-    let containerNode = document.getElementById('triggerContainer');
-    if (!containerNode) {
-      containerNode = document.createElement('div');
-      containerNode.id = 'triggerContainer';
-      document.body.appendChild(containerNode);
-    }
-    return containerNode;
-  };
-
   getCoordinate = (): { top: number; left: number } => {
     const { mode } = this.props;
     const { top, left, width, height } = this.parentElementClientRect;
     const menuWidth = this.getMenuStyle().width;
     if (mode === 'horizontal') {
+      if (left + menuWidth <= window.innerWidth) {
+        this.placementClassName = 'bottom-left';
+        return {
+          left,
+          top: top + height,
+        };
+      }
+      this.placementClassName = 'bottom-right';
       return {
-        left,
+        left: left + width - menuWidth,
         top: top + height,
       };
     }
 
     if (mode === 'vertical') {
       if (width + left + menuWidth <= window.innerWidth) {
+        this.placementClassName = 'right-top';
         return {
           left: left + width,
           top,
         };
       }
+      this.placementClassName = 'left-top';
       return {
         left: left - menuWidth,
         top,
@@ -167,12 +169,11 @@ export default class PopupMenu extends React.Component<
   };
 
   getClasses = (): string => {
-    const { prefixCls, mode } = this.props;
-
+    const { prefixCls } = this.props;
     return classNames(prefixCls, `${prefixCls}-sub`, {
       [`${prefixCls}-vertical`]: true,
-      [`${prefixCls}-bottom-left`]: mode === 'horizontal',
-      [`${prefixCls}-right-top`]: mode === 'vertical',
+      [`${prefixCls}-placement-${this.placementClassName}`]: this
+        .placementClassName,
     });
   };
 
@@ -187,6 +188,16 @@ export default class PopupMenu extends React.Component<
         {children}
       </ul>
     );
+  };
+
+  createContainer = (): Element => {
+    let containerNode = document.getElementById('triggerContainer');
+    if (!containerNode) {
+      containerNode = document.createElement('div');
+      containerNode.id = 'triggerContainer';
+      document.body.appendChild(containerNode);
+    }
+    return containerNode;
   };
 
   render() {
