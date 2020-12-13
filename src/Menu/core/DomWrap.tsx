@@ -3,6 +3,7 @@ import ReactDom from 'react-dom';
 import classNames from 'classnames';
 import ResizeObserver from 'resize-observer-polyfill';
 import { MenuMode } from './Menu';
+import SubMenu from './SubMenu';
 
 export interface DomWrapProps {
   prefixCls?: string;
@@ -11,13 +12,17 @@ export interface DomWrapProps {
   mode?: MenuMode;
   style?: React.CSSProperties;
 }
-interface DomWrapState {}
+interface DomWrapState {
+  lastVisibleIndex: number;
+}
 
 export default class DomWrap extends React.Component<
   DomWrapProps,
   DomWrapState
 > {
-  public readonly state: Readonly<DomWrapState> = {};
+  public readonly state: Readonly<DomWrapState> = {
+    lastVisibleIndex: -1,
+  };
 
   public menuRef = React.createRef<HTMLUListElement>();
 
@@ -42,8 +47,6 @@ export default class DomWrap extends React.Component<
     const { children } = menuElement;
     this.resizeObserver = new ResizeObserver(entries => {
       entries.forEach(entry => {
-        // const {left, top, width, height} = entry.contentRect;
-        // console.log(left, top, width, height)
         this.onResize();
       });
     });
@@ -60,19 +63,88 @@ export default class DomWrap extends React.Component<
     const menuElementWidth = menuElement.getBoundingClientRect().width;
 
     let totalChildrenWidth = 0;
-    [...children].forEach(item => {
+
+    let lastVisibleIndex = -1;
+
+    [...children].some((item, index) => {
+      const isOverflowed = item.className.includes('overflowed');
+      if (isOverflowed) {
+        item.style.display = 'inline-block';
+      }
+
       const { width } = item.getBoundingClientRect();
+
+      if (isOverflowed) {
+        item.style.display = 'none';
+      }
       totalChildrenWidth += width;
+
+      if (totalChildrenWidth > menuElementWidth) {
+        lastVisibleIndex = index - 1;
+        return true;
+      }
+
+      return false;
     });
 
-    console.log(menuElementWidth, totalChildrenWidth);
+    this.setState({
+      lastVisibleIndex,
+    });
+  };
+
+  getOverflowedSubMenuItem = (
+    overflowedItems: React.ReactElement[],
+  ): React.ReactElement => {
+    let style: React.CSSProperties = {};
+
+    if (overflowedItems.length > 0) {
+      style = {
+        visibility: 'visible',
+      };
+    } else {
+      style = {
+        display: 'none',
+      };
+    }
+
+    return (
+      <SubMenu title="..." style={style} key="overflowed" mode="horizontal">
+        {overflowedItems}
+      </SubMenu>
+    );
+  };
+
+  getChildren = () => {
+    const { children, prefixCls } = this.props;
+    const { lastVisibleIndex } = this.state;
+    const overflowedItems: React.ReactElement[] = [];
+    const overflowedStyle: React.CSSProperties = {
+      display: 'none',
+    };
+    const originChildren: React.ReactElement[] = React.Children.map(
+      children,
+      (item, index) => {
+        if (index > lastVisibleIndex && lastVisibleIndex > -1) {
+          overflowedItems.push(item);
+          return React.cloneElement(item, {
+            className: `${prefixCls}-item-overflowed`,
+            style: overflowedStyle,
+          });
+        }
+        return React.cloneElement(item, {});
+      },
+    );
+
+    const overflowedSubMenu = this.getOverflowedSubMenuItem(overflowedItems);
+
+    return [...originChildren, overflowedSubMenu];
   };
 
   render() {
-    const { className, style, children } = this.props;
+    const { className, style } = this.props;
     return (
       <ul className={className} style={style} ref={this.menuRef}>
-        {children}
+        {this.getChildren()}
       </ul>
     );
   }

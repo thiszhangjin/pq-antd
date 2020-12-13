@@ -12,6 +12,7 @@ export interface SubMenuProps {
   key?: string;
   title?: string | React.ReactNode;
   mode?: MenuMode;
+  style?: React.CSSProperties;
   onTitleClick?: () => void;
 }
 interface SubMenuState {
@@ -52,7 +53,7 @@ export default class SubMenu extends React.Component<
   };
 
   render() {
-    const { prefixCls, className, title, mode, children } = this.props;
+    const { prefixCls, key, className, title, mode, style } = this.props;
     const { PopupMenuVisible } = this.state;
     const classes = classNames(
       prefixCls,
@@ -65,9 +66,11 @@ export default class SubMenu extends React.Component<
     return (
       <li
         className={classes}
+        key={key}
         ref={this.subMenuRef}
         onMouseEnter={() => this.onMouseAction(true)}
         onMouseLeave={() => this.onMouseAction(false)}
+        style={style}
       >
         <div className={`${prefixCls}-submenu-title`}>{title}</div>
         <PopupMenu

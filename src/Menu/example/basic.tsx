@@ -19,11 +19,11 @@ class App extends React.Component {
   render() {
     return (
       <Menu mode="horizontal">
-        <Menu.Item key="mail">
+        <Menu.Item key="mail23">
           <Icon type="mail" />
           Navigation One
         </Menu.Item>
-        <Menu.Item key="app" disabled>
+        <Menu.Item key="app34" disabled>
           <Icon type="appstore" />
           Navigation Two
         </Menu.Item>
@@ -35,7 +35,7 @@ class App extends React.Component {
             </span>
           }
         >
-          <Menu.Item key="mail">
+          <Menu.Item key="mail2332">
             <Icon type="mail" />
             Navigation One
           </Menu.Item>
@@ -47,7 +47,7 @@ class App extends React.Component {
               </span>
             }
           >
-            <Menu.Item key="app" disabled>
+            <Menu.Item key="app2" disabled>
               <Icon type="appstore" />
               Navigation Navigation Navigation
             </Menu.Item>
@@ -61,11 +61,15 @@ class App extends React.Component {
             </span>
           }
         >
-          <Menu.Item key="app" disabled>
+          <Menu.Item key="app1" disabled>
             <Icon type="appstore" />
             Navigation Navigation Navigation
           </Menu.Item>
         </SubMenu>
+        <Menu.Item key="mail1">
+          <Icon type="mail" />
+          Navigation One
+        </Menu.Item>
       </Menu>
     );
   }
