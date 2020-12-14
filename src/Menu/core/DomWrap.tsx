@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDom from 'react-dom';
-import classNames from 'classnames';
 import ResizeObserver from 'resize-observer-polyfill';
 import { MenuMode } from './Menu';
 import SubMenu from './SubMenu';
@@ -46,7 +44,7 @@ export default class DomWrap extends React.Component<
     const menuElement: Element = this.menuRef.current!;
     const { children } = menuElement;
     this.resizeObserver = new ResizeObserver(entries => {
-      entries.forEach(entry => {
+      entries.forEach(() => {
         this.onResize();
       });
     });
@@ -93,8 +91,8 @@ export default class DomWrap extends React.Component<
   };
 
   getOverflowedSubMenuItem = (
-    overflowedItems: React.ReactElement[],
-  ): React.ReactElement => {
+    overflowedItems: React.ReactNode[],
+  ): React.ReactNode => {
     let style: React.CSSProperties = {};
 
     if (overflowedItems.length > 0) {
@@ -117,23 +115,23 @@ export default class DomWrap extends React.Component<
   getChildren = () => {
     const { children, prefixCls } = this.props;
     const { lastVisibleIndex } = this.state;
-    const overflowedItems: React.ReactElement[] = [];
+    const overflowedItems: React.ReactNode[] = [];
     const overflowedStyle: React.CSSProperties = {
       display: 'none',
     };
-    const originChildren: React.ReactElement[] = React.Children.map(
+    const originChildren: React.ReactNode[] = React.Children.map(
       children,
       (item, index) => {
         if (index > lastVisibleIndex && lastVisibleIndex > -1) {
           overflowedItems.push(item);
-          return React.cloneElement(item, {
+          return React.cloneElement(item as React.ReactElement, {
             className: `${prefixCls}-item-overflowed`,
             style: overflowedStyle,
           });
         }
-        return React.cloneElement(item, {});
+        return React.cloneElement(item as React.ReactElement, {});
       },
-    );
+    ) as React.ReactNode[];
 
     const overflowedSubMenu = this.getOverflowedSubMenuItem(overflowedItems);
 
