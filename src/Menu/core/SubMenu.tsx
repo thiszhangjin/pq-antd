@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { Icon } from 'antd';
 import PopupMenu from './PopupMenu';
 import { MenuMode } from './Menu';
 
@@ -29,13 +30,14 @@ export default class SubMenu extends React.Component<
 
   static defaultProps = {
     prefixCls: 'pq-antd-menu',
+    arrowIcon: true,
   };
 
   private subMenuRef = React.createRef<HTMLLIElement>();
 
-  onMouseAction = (visible: boolean) => {
+  onMouseAction = (isHover: boolean) => {
     this.setState({
-      PopupMenuVisible: visible,
+      PopupMenuVisible: isHover,
     });
   };
 
@@ -46,10 +48,19 @@ export default class SubMenu extends React.Component<
       return React.Children.map(children, item =>
         React.cloneElement(item, {
           mode: 'vertical',
+          eventKey: item.props.eventKey || item.key,
         }),
       );
     }
     return <div />;
+  };
+
+  getArrowIcon = () => {
+    const { mode, prefixCls } = this.props;
+    if (mode === 'horizontal') {
+      return null;
+    }
+    return <Icon type="right" className={`${prefixCls}-arrow`} />;
   };
 
   render() {
@@ -60,6 +71,7 @@ export default class SubMenu extends React.Component<
       `${prefixCls}-submenu`,
       {
         [`${prefixCls}-vertical`]: true,
+        [`${prefixCls}-submenu-active`]: PopupMenuVisible,
       },
       className,
     );
@@ -73,6 +85,7 @@ export default class SubMenu extends React.Component<
         style={style}
       >
         <div className={`${prefixCls}-submenu-title`}>{title}</div>
+        {this.getArrowIcon()}
         <PopupMenu
           visible={PopupMenuVisible}
           parentNode={this.subMenuRef}

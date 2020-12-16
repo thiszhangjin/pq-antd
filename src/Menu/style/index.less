@@ -14,6 +14,7 @@
   content: '';
   display: block;
   position: absolute;
+  z-index: 999;
 }
 
 .@{menu} {
@@ -23,11 +24,13 @@
   &-horizontal {
     height: 48px;
     border-bottom: 1px solid #e8e8e8;
-    .@{menu}-item {
-      display: inline-block;
-    }
+    .@{menu}-item,
     .@{menu}-submenu {
       display: inline-block;
+      &-active,
+      &-select {
+        border-bottom: 2px solid #1890ff;
+      }
     }
   }
   &-vertical {
@@ -39,14 +42,30 @@
   &-submenu {
     line-height: 48px;
     margin: 0;
-    padding: 0 20px;
+    padding: 0 30px;
     white-space: nowrap;
     cursor: pointer;
+    position: relative;
+    .anticon {
+      padding-right: 10px;
+    }
+    &-active,
+    &-select {
+      color: #1890ff;
+    }
   }
   &-item {
     &-overflowed {
       visibility: hidden;
     }
+  }
+  &-arrow {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -5px;
+    padding: 0 !important;
+    font-size: 10px;
   }
   &-placement {
     &-bottom-left,
@@ -77,9 +96,6 @@
         right: -3px;
       }
     }
-  }
-  .anticon {
-    padding-right: 10px;
   }
 }
 .@{menu}-sub {

@@ -19,7 +19,7 @@ class App extends React.Component {
   render() {
     return (
       <Menu mode="horizontal">
-        <Menu.Item key="mail23">
+        <Menu.Item key="dkdsa">
           <Icon type="mail" />
           Navigation One
         </Menu.Item>

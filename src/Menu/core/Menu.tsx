@@ -58,6 +58,17 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
 
   static SubMenu = SubMenu;
 
+  public constructor(props: MenuProps) {
+    super(props);
+    const selectedKeys = this.props.selectedKeys || [];
+    const openKeys = this.props.openKeys || [];
+    this.store = create({
+      selectedKeys,
+      openKeys,
+      onClick: null,
+    });
+  }
+
   public readonly state: Readonly<MenuState> = {};
 
   static defaultProps = {
@@ -66,17 +77,28 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
     theme: 'light',
   };
 
-  public store = create({
-    count: 0,
-  });
+  public store = create({});
+
+  componentDidMount() {
+    this.store.setState({
+      onClick: this.onClick,
+    });
+  }
+
+  onClick = (key: string) => {
+    this.store.setState({
+      selectedKeys: [key],
+    });
+  };
 
   getChildren = (): React.ReactNode => {
     const { children, mode } = this.props;
     if (children) {
       // @ts-ignore
-      return React.Children.map(children, item =>
+      return React.Children.map(children, (item, index) =>
         React.cloneElement(item, {
           mode,
+          eventKey: item.key,
         }),
       );
     }

@@ -6,26 +6,63 @@ export interface MenuItemProps {
   prefixCls?: string;
   className?: string;
   disabled?: boolean;
-  key?: string;
+  eventKey?: string;
   title?: string;
+  selectedKeys: string[];
   style?: React.CSSProperties;
 }
-interface MenuItemState {}
+interface MenuItemState {
+  isHover: boolean;
+}
 // @ts-ignore
-@connect(state => ({ count: state.count }))
+@connect(state => ({
+  selectedKeys: state.selectedKeys,
+  onClick: state.onClick,
+}))
 export default class extends React.Component<MenuItemProps, MenuItemState> {
-  public readonly state: Readonly<MenuItemState> = {};
+  public readonly state: Readonly<MenuItemState> = {
+    isHover: false,
+  };
 
   static defaultProps = {
     prefixCls: 'pq-antd-menu-item',
   };
 
+  onMouseAction = (isHover: boolean) => {
+    this.setState({
+      isHover,
+    });
+  };
+
+  onClick = () => {
+    const { eventKey } = this.props;
+    if (this.props.onClick) {
+      this.props.onClick(eventKey);
+    }
+  };
+
   render() {
-    console.log(this.props);
-    const { prefixCls, key, className, children, style } = this.props;
-    const classes = classNames(prefixCls, className);
+    const {
+      prefixCls,
+      className,
+      children,
+      selectedKeys,
+      eventKey,
+      style,
+    } = this.props;
+    const { isHover } = this.state;
+    const classes = classNames(prefixCls, className, {
+      [`${prefixCls}-active`]: isHover,
+      [`${prefixCls}-select`]: selectedKeys.includes(eventKey),
+    });
     return (
-      <li key={key} className={classes} style={style}>
+      <li
+        className={classes}
+        style={style}
+        onMouseEnter={() => this.onMouseAction(true)}
+        onMouseLeave={() => this.onMouseAction(false)}
+        onClick={this.onClick}
+      >
         {children}
       </li>
     );

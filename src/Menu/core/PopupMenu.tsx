@@ -160,11 +160,7 @@ export default class PopupMenu extends React.Component<
     if (visible) {
       targetStyle.top = top;
       targetStyle.left = left;
-    } else {
-      targetStyle.top = 0;
-      targetStyle.left = 0;
     }
-
     if (mode === 'horizontal') {
       targetStyle.minWidth = `${width}px`;
     }
