@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { Provider, create } from 'mini-store';
 import MenuItem from './MenuItem';
 import SubMenu from './SubMenu';
 import DomWrap from './DomWrap';
@@ -65,6 +66,10 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
     theme: 'light',
   };
 
+  public store = create({
+    count: 0,
+  });
+
   getChildren = (): React.ReactNode => {
     const { children, mode } = this.props;
     if (children) {
@@ -89,9 +94,11 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
       className,
     );
     return (
-      <DomWrap className={classes} style={style}>
-        {this.getChildren()}
-      </DomWrap>
+      <Provider store={this.store}>
+        <DomWrap className={classes} style={style}>
+          {this.getChildren()}
+        </DomWrap>
+      </Provider>
     );
   }
 }

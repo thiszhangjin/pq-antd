@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { connect } from 'mini-store';
 
 export interface MenuItemProps {
   prefixCls?: string;
@@ -10,11 +11,9 @@ export interface MenuItemProps {
   style?: React.CSSProperties;
 }
 interface MenuItemState {}
-
-export default class MenuItem extends React.Component<
-  MenuItemProps,
-  MenuItemState
-> {
+// @ts-ignore
+@connect(state => ({ count: state.count }))
+export default class extends React.Component<MenuItemProps, MenuItemState> {
   public readonly state: Readonly<MenuItemState> = {};
 
   static defaultProps = {
@@ -22,6 +21,7 @@ export default class MenuItem extends React.Component<
   };
 
   render() {
+    console.log(this.props);
     const { prefixCls, key, className, children, style } = this.props;
     const classes = classNames(prefixCls, className);
     return (
