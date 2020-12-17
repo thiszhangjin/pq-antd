@@ -55,7 +55,7 @@ export default class DomWrap extends React.Component<
   };
 
   onResize = () => {
-    const menuElement: Element = this.menuRef.current!;
+    const menuElement: HTMLUListElement = this.menuRef.current!;
     const { children } = menuElement;
 
     const menuElementWidth = menuElement.getBoundingClientRect().width;

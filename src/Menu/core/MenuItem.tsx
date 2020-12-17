@@ -10,6 +10,7 @@ export interface MenuItemProps {
   title?: string;
   selectedKeys: string[];
   style?: React.CSSProperties;
+  onClick?: (key: string) => void;
 }
 interface MenuItemState {
   isHover: boolean;
@@ -36,7 +37,7 @@ export default class extends React.Component<MenuItemProps, MenuItemState> {
 
   onClick = () => {
     const { eventKey } = this.props;
-    if (this.props.onClick) {
+    if (this.props.onClick && eventKey) {
       this.props.onClick(eventKey);
     }
   };
@@ -53,7 +54,7 @@ export default class extends React.Component<MenuItemProps, MenuItemState> {
     const { isHover } = this.state;
     const classes = classNames(prefixCls, className, {
       [`${prefixCls}-active`]: isHover,
-      [`${prefixCls}-select`]: selectedKeys.includes(eventKey),
+      [`${prefixCls}-selected`]: eventKey && selectedKeys.includes(eventKey),
     });
     return (
       <li

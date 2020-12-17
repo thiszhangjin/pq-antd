@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import classNames from 'classnames';
 import { Provider, create } from 'mini-store';
 import MenuItem from './MenuItem';
@@ -94,12 +94,13 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
   getChildren = (): React.ReactNode => {
     const { children, mode } = this.props;
     if (children) {
-      // @ts-ignore
-      return React.Children.map(children, (item, index) =>
-        React.cloneElement(item, {
-          mode,
-          eventKey: item.key,
-        }),
+      return React.Children.map(
+        children as ReactElement[],
+        (item: ReactElement) =>
+          React.cloneElement(item, {
+            mode,
+            eventKey: item.key,
+          }),
       );
     }
     return <div />;

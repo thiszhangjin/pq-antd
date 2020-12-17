@@ -7,7 +7,7 @@ export interface PopupMenuProps {
   prefixCls?: string;
   className?: string;
   visible?: boolean;
-  parentNode?: React.RefObject<HTMLDivElement>;
+  parentNode?: React.RefObject<any>;
   mode?: MenuMode;
   children?: React.ReactNode;
 }
