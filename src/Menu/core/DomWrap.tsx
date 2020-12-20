@@ -41,17 +41,22 @@ export default class DomWrap extends React.Component<
   }
 
   observerChildren = () => {
-    const menuElement: Element = this.menuRef.current!;
-    const { children } = menuElement;
-    this.resizeObserver = new ResizeObserver(entries => {
-      entries.forEach(() => {
-        this.onResize();
+    const { mode } = this.props;
+    if (mode === 'horizontal') {
+      const menuElement: Element = this.menuRef.current!;
+      const { children } = menuElement;
+      this.resizeObserver = new ResizeObserver(entries => {
+        entries.forEach(() => {
+          this.onResize();
+        });
       });
-    });
 
-    ([...children, menuElement] as HTMLElement[]).forEach((el: HTMLElement) => {
-      this.resizeObserver!.observe(el);
-    });
+      ([...children, menuElement] as HTMLElement[]).forEach(
+        (el: HTMLElement) => {
+          this.resizeObserver!.observe(el);
+        },
+      );
+    }
   };
 
   onResize = () => {

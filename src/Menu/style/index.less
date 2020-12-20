@@ -34,8 +34,15 @@
     }
   }
   &-vertical {
+    border-right: 1px solid #e8e8e8;
     .@{menu}-item {
       width: 100%;
+      .text-overflow();
+    }
+    .@{menu}-submenu {
+      &-title {
+        .text-overflow();
+      }
     }
   }
   &-item,

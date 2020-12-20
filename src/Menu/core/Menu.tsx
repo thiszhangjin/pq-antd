@@ -118,7 +118,7 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
     );
     return (
       <Provider store={this.store}>
-        <DomWrap className={classes} style={style}>
+        <DomWrap className={classes} mode={mode} style={style}>
           {this.getChildren()}
         </DomWrap>
       </Provider>

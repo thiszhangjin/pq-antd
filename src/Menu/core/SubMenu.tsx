@@ -94,7 +94,7 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
       prefixCls,
       `${prefixCls}-submenu`,
       {
-        [`${prefixCls}-vertical`]: true,
+        // [`${prefixCls}-submenu-vertical`]: true,
         [`${prefixCls}-submenu-active`]: PopupMenuVisible,
         [`${prefixCls}-submenu-selected`]: this.isChildrenSelected(children),
       },
