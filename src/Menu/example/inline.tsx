@@ -18,7 +18,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <Menu style={{ width: 256 }} mode="vertical">
+      <Menu style={{ width: 256 }} mode="inline">
         <Menu.Item key="dkdsa">
           <Icon type="mail" />
           Navigation One

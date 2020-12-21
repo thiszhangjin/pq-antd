@@ -37,18 +37,18 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
 
   private subMenuRef = React.createRef<HTMLLIElement>();
 
-  onMouseAction = (isHover: boolean) => {
+  onMouseAction = (event: React.MouseEvent, isHover: boolean) => {
     this.setState({
       PopupMenuVisible: isHover,
     });
   };
 
   getChildren = (): ReactElement[] => {
-    const { children } = this.props;
+    const { children, mode } = this.props;
     if (children) {
       return React.Children.map(children as ReactElement[], item =>
         React.cloneElement(item, {
-          mode: 'vertical',
+          mode: mode === 'inline' ? 'inline' : 'vertical',
           eventKey: item.props.eventKey || item.key,
         }),
       );
@@ -58,10 +58,13 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
 
   getArrowIcon = () => {
     const { mode, prefixCls } = this.props;
-    if (mode === 'horizontal') {
-      return null;
+    if (mode === 'inline') {
+      return <Icon type="down" className={`${prefixCls}-arrow`} />;
     }
-    return <Icon type="right" className={`${prefixCls}-arrow`} />;
+    if (mode === 'vertical') {
+      return <Icon type="right" className={`${prefixCls}-arrow`} />;
+    }
+    return null;
   };
 
   getChildrenKeys = (
@@ -105,19 +108,27 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
         className={classes}
         key={key}
         ref={this.subMenuRef}
-        onMouseEnter={() => this.onMouseAction(true)}
-        onMouseLeave={() => this.onMouseAction(false)}
+        onMouseEnter={event => this.onMouseAction(event, true)}
+        onMouseLeave={event => this.onMouseAction(event, false)}
         style={style}
       >
-        <div className={`${prefixCls}-submenu-title`}>{title}</div>
-        {this.getArrowIcon()}
-        <PopupMenu
-          visible={PopupMenuVisible}
-          parentNode={this.subMenuRef}
-          mode={mode}
-        >
-          {children}
-        </PopupMenu>
+        <div className={`${prefixCls}-submenu-title`}>
+          {title}
+          {this.getArrowIcon()}
+        </div>
+        {mode === 'inline' ? (
+          <ul className="pq-antd-menu pq-antd-menu-inline pq-antd-menu-light">
+            {children}
+          </ul>
+        ) : (
+          <PopupMenu
+            visible={PopupMenuVisible}
+            parentNode={this.subMenuRef}
+            mode={mode}
+          >
+            {children}
+          </PopupMenu>
+        )}
       </li>
     );
   }

@@ -29,19 +29,39 @@
       display: inline-block;
       &-active,
       &-selected {
+        color: #1890ff;
         border-bottom: 2px solid #1890ff;
       }
     }
   }
-  &-vertical {
+  &-inline {
+    .@{menu} {
+      &-inline {
+        margin: 0;
+        padding-left: 25px;
+      }
+    }
+  }
+  &-vertical,
+  &-inline {
     border-right: 1px solid #e8e8e8;
     .@{menu}-item {
       width: 100%;
       .text-overflow();
+      &-active,
+      &-selected {
+        color: #1890ff;
+      }
     }
     .@{menu}-submenu {
       &-title {
         .text-overflow();
+      }
+      &-active,
+      &-selected {
+        & > div {
+          color: #1890ff;
+        }
       }
     }
   }
@@ -49,21 +69,23 @@
   &-submenu {
     line-height: 48px;
     margin: 0;
-    padding: 0 30px;
     white-space: nowrap;
     cursor: pointer;
     position: relative;
     .anticon {
       padding-right: 10px;
     }
-    &-active,
-    &-selected {
-      color: #1890ff;
-    }
   }
   &-item {
+    padding: 0 30px;
     &-overflowed {
       visibility: hidden;
+    }
+  }
+  &-submenu {
+    &-title {
+      padding: 0 30px;
+      position: relative;
     }
   }
   &-arrow {
@@ -104,10 +126,14 @@
       }
     }
   }
+  // ul {
+  //   padding: 0 !important;
+  //   margin: 0 !important;
+  // }
 }
 .@{menu}-sub {
   min-width: 200px;
-  position: absolute;
+  position: fixed;
   z-index: 999;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   background: #fff;

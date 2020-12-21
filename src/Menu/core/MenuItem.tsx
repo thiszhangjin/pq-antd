@@ -29,7 +29,7 @@ export default class extends React.Component<MenuItemProps, MenuItemState> {
     prefixCls: 'pq-antd-menu-item',
   };
 
-  onMouseAction = (isHover: boolean) => {
+  onMouseAction = (event: React.MouseEvent, isHover: boolean) => {
     this.setState({
       isHover,
     });
@@ -60,8 +60,8 @@ export default class extends React.Component<MenuItemProps, MenuItemState> {
       <li
         className={classes}
         style={style}
-        onMouseEnter={() => this.onMouseAction(true)}
-        onMouseLeave={() => this.onMouseAction(false)}
+        onMouseEnter={event => this.onMouseAction(event, true)}
+        onMouseLeave={event => this.onMouseAction(event, false)}
         onClick={this.onClick}
       >
         {children}
