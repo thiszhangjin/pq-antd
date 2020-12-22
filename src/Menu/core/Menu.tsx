@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, Children } from 'react';
 import classNames from 'classnames';
 import { Provider, create } from 'mini-store';
 import MenuItem from './MenuItem';
@@ -65,7 +65,10 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
     this.store = create({
       selectedKeys,
       openKeys,
+      activeKeys: [],
       onClick: null,
+      updateActiveKeys: null,
+      updateOpenKeys: null,
     });
   }
 
@@ -82,6 +85,8 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
   componentDidMount() {
     this.store.setState({
       onClick: this.onClick,
+      updateActiveKeys: this.updateActiveKeys,
+      updateOpenKeys: this.updateOpenKeys,
     });
   }
 
@@ -91,23 +96,23 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
     });
   };
 
-  getChildren = (): React.ReactNode => {
-    const { children, mode } = this.props;
-    if (children) {
-      return React.Children.map(
-        children as ReactElement[],
-        (item: ReactElement) =>
-          React.cloneElement(item, {
-            mode,
-            eventKey: item.key,
-          }),
-      );
-    }
-    return <div />;
+  updateActiveKeys = (key: string, active: boolean) => {
+    this.store.setState({
+      activeKeys: active ? [key] : [],
+    });
+  };
+
+  updateOpenKeys = (key: string, open: boolean) => {
+    const { openKeys } = this.store.getState();
+    this.store.setState({
+      openKeys: open
+        ? [...openKeys, key]
+        : openKeys.filter((item: string) => item !== key),
+    });
   };
 
   render() {
-    const { prefixCls, mode, theme, className, style } = this.props;
+    const { prefixCls, mode, theme, className, children, style } = this.props;
     const classes = classNames(
       prefixCls,
       {
@@ -119,7 +124,7 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
     return (
       <Provider store={this.store}>
         <DomWrap className={classes} mode={mode} style={style}>
-          {this.getChildren()}
+          {children}
         </DomWrap>
       </Provider>
     );

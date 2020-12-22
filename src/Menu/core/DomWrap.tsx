@@ -111,14 +111,20 @@ export default class DomWrap extends React.Component<
     }
 
     return (
-      <SubMenu title="..." style={style} key="overflowed" mode="horizontal">
+      <SubMenu
+        title="..."
+        style={style}
+        key="overflowed"
+        eventKey="overflowed"
+        mode="horizontal"
+      >
         {overflowedItems}
       </SubMenu>
     );
   };
 
   getChildren = () => {
-    const { children, prefixCls } = this.props;
+    const { children, prefixCls, mode } = this.props;
     const { lastVisibleIndex } = this.state;
     const overflowedItems: React.ReactNode[] = [];
     const overflowedStyle: React.CSSProperties = {
@@ -127,14 +133,19 @@ export default class DomWrap extends React.Component<
     const originChildren: React.ReactNode[] = React.Children.map(
       children,
       (item, index) => {
+        const baseProps = {
+          mode,
+          eventKey: item.key,
+        };
         if (index > lastVisibleIndex && lastVisibleIndex > -1) {
           overflowedItems.push(item);
           return React.cloneElement(item as React.ReactElement, {
             className: `${prefixCls}-item-overflowed`,
             style: overflowedStyle,
+            ...baseProps,
           });
         }
-        return React.cloneElement(item as React.ReactElement, {});
+        return React.cloneElement(item as React.ReactElement, { ...baseProps });
       },
     ) as React.ReactNode[];
 

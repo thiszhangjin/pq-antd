@@ -11,24 +11,29 @@ export interface SubMenuProps {
   popupClassName?: string;
   children?: React.ReactNode;
   disabled?: boolean;
-  key?: string;
+  eventKey?: string;
   title?: string | React.ReactNode;
   mode?: MenuMode;
   selectedKeys: string[];
+  activeKeys: string[];
+  openKeys: string[];
   style?: React.CSSProperties;
   onTitleClick?: () => void;
+  updateActiveKeys?: (key: string, active: boolean) => void;
+  updateOpenKeys?: (key: string, active: boolean) => void;
 }
-interface SubMenuState {
-  PopupMenuVisible: boolean;
-}
+interface SubMenuState {}
 
 @connect(state => ({
   selectedKeys: state.selectedKeys,
+  activeKeys: state.activeKeys,
+  openKeys: state.openKeys,
+  onClick: state.onClick,
+  updateActiveKeys: state.updateActiveKeys,
+  updateOpenKeys: state.updateOpenKeys,
 }))
 export default class extends React.Component<SubMenuProps, SubMenuState> {
-  public readonly state: Readonly<SubMenuState> = {
-    PopupMenuVisible: false,
-  };
+  public readonly state: Readonly<SubMenuState> = {};
 
   static defaultProps = {
     prefixCls: 'pq-antd-menu',
@@ -37,10 +42,26 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
 
   private subMenuRef = React.createRef<HTMLLIElement>();
 
-  onMouseAction = (event: React.MouseEvent, isHover: boolean) => {
-    this.setState({
-      PopupMenuVisible: isHover,
-    });
+  onSubMenuMouseAction = (mouse: boolean) => {
+    const { eventKey } = this.props;
+    if (this.props.updateOpenKeys && eventKey) {
+      this.props.updateOpenKeys(eventKey, mouse);
+    }
+  };
+
+  onSubMenuClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    const { eventKey, openKeys } = this.props;
+    if (this.props.updateOpenKeys && eventKey) {
+      this.props.updateOpenKeys(eventKey, !openKeys.includes(eventKey));
+    }
+  };
+
+  onTitleMouseAction = (mouse: boolean) => {
+    const { eventKey } = this.props;
+    if (this.props.updateActiveKeys && eventKey) {
+      this.props.updateActiveKeys(eventKey, mouse);
+    }
   };
 
   getChildren = (): ReactElement[] => {
@@ -56,10 +77,12 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
     return [];
   };
 
-  getArrowIcon = () => {
+  getArrowIcon = (isOpen: boolean) => {
     const { mode, prefixCls } = this.props;
     if (mode === 'inline') {
-      return <Icon type="down" className={`${prefixCls}-arrow`} />;
+      return (
+        <Icon type={isOpen ? 'up' : 'down'} className={`${prefixCls}-arrow`} />
+      );
     }
     if (mode === 'vertical') {
       return <Icon type="right" className={`${prefixCls}-arrow`} />;
@@ -90,42 +113,60 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
   };
 
   render() {
-    const { prefixCls, key, className, title, mode, style } = this.props;
-    const { PopupMenuVisible } = this.state;
+    const {
+      prefixCls,
+      eventKey,
+      activeKeys,
+      openKeys,
+      className,
+      title,
+      mode,
+      style,
+    } = this.props;
     const children = this.getChildren();
+    const isOpen = eventKey ? openKeys.includes(eventKey) : false;
+    const isActive = eventKey ? activeKeys.includes(eventKey) : false;
     const classes = classNames(
       prefixCls,
       `${prefixCls}-submenu`,
       {
-        // [`${prefixCls}-submenu-vertical`]: true,
-        [`${prefixCls}-submenu-active`]: PopupMenuVisible,
+        [`${prefixCls}-submenu-open`]: isOpen,
+        [`${prefixCls}-submenu-active`]: isActive,
         [`${prefixCls}-submenu-selected`]: this.isChildrenSelected(children),
       },
       className,
     );
+    const eventAction: {
+      [key: string]: any;
+    } = {};
+    if (mode === 'vertical' || mode === 'horizontal') {
+      eventAction.onMouseEnter = () => this.onSubMenuMouseAction(true);
+      eventAction.onMouseLeave = () => this.onSubMenuMouseAction(false);
+    } else if (mode === 'inline') {
+      eventAction.onClick = (event: React.MouseEvent) =>
+        this.onSubMenuClick(event);
+    }
     return (
       <li
         className={classes}
-        key={key}
         ref={this.subMenuRef}
-        onMouseEnter={event => this.onMouseAction(event, true)}
-        onMouseLeave={event => this.onMouseAction(event, false)}
         style={style}
+        {...eventAction}
       >
-        <div className={`${prefixCls}-submenu-title`}>
+        <div
+          className={`${prefixCls}-submenu-title`}
+          onMouseEnter={() => this.onTitleMouseAction(true)}
+          onMouseLeave={() => this.onTitleMouseAction(false)}
+        >
           {title}
-          {this.getArrowIcon()}
+          {this.getArrowIcon(isOpen)}
         </div>
         {mode === 'inline' ? (
           <ul className="pq-antd-menu pq-antd-menu-inline pq-antd-menu-light">
             {children}
           </ul>
         ) : (
-          <PopupMenu
-            visible={PopupMenuVisible}
-            parentNode={this.subMenuRef}
-            mode={mode}
-          >
+          <PopupMenu visible={isOpen} parentNode={this.subMenuRef} mode={mode}>
             {children}
           </PopupMenu>
         )}

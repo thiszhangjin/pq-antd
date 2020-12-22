@@ -19,27 +19,29 @@ class App extends React.Component {
   render() {
     return (
       <Menu mode="horizontal">
-        <Menu.Item key="dkdsa">
+        <Menu.Item key="menu1">
           <Icon type="mail" />
           Navigation One
         </Menu.Item>
-        <Menu.Item key="app34" disabled>
+        <Menu.Item key="menu2" disabled>
           <Icon type="appstore" />
           Navigation Two
         </Menu.Item>
         <SubMenu
+          key="sub1"
           title={
             <span className="submenu-title-wrapper">
               <Icon type="setting" />
-              Navigation Three - Submenu
+              Navigation Three
             </span>
           }
         >
-          <Menu.Item key="mail2332">
+          <Menu.Item key="menu3">
             <Icon type="mail" />
             Navigation One
           </Menu.Item>
           <SubMenu
+            key="sub1-1"
             title={
               <span className="submenu-title-wrapper">
                 <Icon type="setting" />
@@ -47,13 +49,18 @@ class App extends React.Component {
               </span>
             }
           >
-            <Menu.Item key="app2" disabled>
+            <Menu.Item key="menu4" disabled>
               <Icon type="appstore" />
-              Navigation Navigation Navigation
+              Navigation1
+            </Menu.Item>
+            <Menu.Item key="menu5" disabled>
+              <Icon type="appstore" />
+              Navigation2
             </Menu.Item>
           </SubMenu>
         </SubMenu>
         <SubMenu
+          key="sub2"
           title={
             <span className="submenu-title-wrapper">
               <Icon type="setting" />
@@ -61,12 +68,16 @@ class App extends React.Component {
             </span>
           }
         >
-          <Menu.Item key="app1" disabled>
+          <Menu.Item key="menu6" disabled>
             <Icon type="appstore" />
-            Navigation Navigation Navigation
+            Navigation1
+          </Menu.Item>
+          <Menu.Item key="menu7" disabled>
+            <Icon type="appstore" />
+            Navigation2
           </Menu.Item>
         </SubMenu>
-        <Menu.Item key="mail1">
+        <Menu.Item key="menu8">
           <Icon type="mail" />
           Navigation One
         </Menu.Item>

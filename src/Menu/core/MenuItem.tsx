@@ -9,34 +9,41 @@ export interface MenuItemProps {
   eventKey?: string;
   title?: string;
   selectedKeys: string[];
+  activeKeys: string[];
+  openKeys: string[];
   style?: React.CSSProperties;
   onClick?: (key: string) => void;
+  updateActiveKeys?: (key: string, active: boolean) => void;
+  updateOpenKeys?: (key: string, active: boolean) => void;
 }
-interface MenuItemState {
-  isHover: boolean;
-}
+interface MenuItemState {}
+
 // @ts-ignore
 @connect(state => ({
   selectedKeys: state.selectedKeys,
+  activeKeys: state.activeKeys,
+  openKeys: state.openKeys,
   onClick: state.onClick,
+  updateActiveKeys: state.updateActiveKeys,
+  updateOpenKeys: state.updateOpenKeys,
 }))
 export default class extends React.Component<MenuItemProps, MenuItemState> {
-  public readonly state: Readonly<MenuItemState> = {
-    isHover: false,
-  };
+  public readonly state: Readonly<MenuItemState> = {};
 
   static defaultProps = {
     prefixCls: 'pq-antd-menu-item',
   };
 
-  onMouseAction = (event: React.MouseEvent, isHover: boolean) => {
-    this.setState({
-      isHover,
-    });
+  onMouseAction = (active: boolean) => {
+    const { eventKey } = this.props;
+    if (this.props.updateActiveKeys && eventKey) {
+      this.props.updateActiveKeys(eventKey, active);
+    }
   };
 
-  onClick = () => {
+  onClick = (event: React.MouseEvent) => {
     const { eventKey } = this.props;
+    event.stopPropagation();
     if (this.props.onClick && eventKey) {
       this.props.onClick(eventKey);
     }
@@ -49,20 +56,20 @@ export default class extends React.Component<MenuItemProps, MenuItemState> {
       children,
       selectedKeys,
       eventKey,
+      activeKeys,
       style,
     } = this.props;
-    const { isHover } = this.state;
     const classes = classNames(prefixCls, className, {
-      [`${prefixCls}-active`]: isHover,
+      [`${prefixCls}-active`]: eventKey && activeKeys.includes(eventKey),
       [`${prefixCls}-selected`]: eventKey && selectedKeys.includes(eventKey),
     });
     return (
       <li
         className={classes}
         style={style}
-        onMouseEnter={event => this.onMouseAction(event, true)}
-        onMouseLeave={event => this.onMouseAction(event, false)}
-        onClick={this.onClick}
+        onMouseEnter={() => this.onMouseAction(true)}
+        onMouseLeave={() => this.onMouseAction(false)}
+        onClick={event => this.onClick(event)}
       >
         {children}
       </li>
