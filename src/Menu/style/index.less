@@ -21,6 +21,7 @@
   white-space: nowrap;
   border: 0;
   box-shadow: none;
+  user-select: none;
   &-horizontal {
     height: 48px;
     border-bottom: 1px solid #e8e8e8;
@@ -40,6 +41,7 @@
         margin: 0;
         padding-left: 25px;
         display: none;
+        border-right: none;
       }
       &-submenu {
         &-open {
@@ -85,6 +87,7 @@
     white-space: nowrap;
     cursor: pointer;
     position: relative;
+    transition: color ease 0.3s;
     .anticon {
       padding-right: 10px;
     }
@@ -140,10 +143,6 @@
       }
     }
   }
-  // ul {
-  //   padding: 0 !important;
-  //   margin: 0 !important;
-  // }
 }
 .@{menu}-sub {
   min-width: 200px;

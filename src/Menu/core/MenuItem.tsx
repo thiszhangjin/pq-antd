@@ -17,8 +17,6 @@ export interface MenuItemProps {
   updateOpenKeys?: (key: string, active: boolean) => void;
 }
 interface MenuItemState {}
-
-// @ts-ignore
 @connect(state => ({
   selectedKeys: state.selectedKeys,
   activeKeys: state.activeKeys,
@@ -31,7 +29,7 @@ export default class extends React.Component<MenuItemProps, MenuItemState> {
   public readonly state: Readonly<MenuItemState> = {};
 
   static defaultProps = {
-    prefixCls: 'pq-antd-menu-item',
+    prefixCls: 'pq-antd-menu',
   };
 
   onMouseAction = (active: boolean) => {
@@ -59,9 +57,10 @@ export default class extends React.Component<MenuItemProps, MenuItemState> {
       activeKeys,
       style,
     } = this.props;
-    const classes = classNames(prefixCls, className, {
-      [`${prefixCls}-active`]: eventKey && activeKeys.includes(eventKey),
-      [`${prefixCls}-selected`]: eventKey && selectedKeys.includes(eventKey),
+    const classes = classNames(className, `${prefixCls}-item`, {
+      [`${prefixCls}-item-active`]: eventKey && activeKeys.includes(eventKey),
+      [`${prefixCls}-item-selected`]:
+        eventKey && selectedKeys.includes(eventKey),
     });
     return (
       <li

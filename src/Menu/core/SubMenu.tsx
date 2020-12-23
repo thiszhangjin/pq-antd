@@ -9,9 +9,9 @@ export interface SubMenuProps {
   prefixCls?: string;
   className?: string;
   popupClassName?: string;
-  children?: React.ReactNode;
+  children?: React.ReactElement[];
   disabled?: boolean;
-  eventKey?: string;
+  eventKey: string;
   title?: string | React.ReactNode;
   overflowed?: boolean;
   mode?: MenuMode;
@@ -24,6 +24,12 @@ export interface SubMenuProps {
   updateOpenKeys?: (key: string, active: boolean) => void;
 }
 interface SubMenuState {}
+
+enum arrowIconTypes {
+  'horizontal' = '',
+  'vertical' = 'right',
+  'inline' = 'down',
+}
 
 @connect(state => ({
   selectedKeys: state.selectedKeys,
@@ -45,7 +51,7 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
 
   onSubMenuMouseAction = (mouse: boolean) => {
     const { eventKey } = this.props;
-    if (this.props.updateOpenKeys && eventKey) {
+    if (this.props.updateOpenKeys) {
       this.props.updateOpenKeys(eventKey, mouse);
     }
   };
@@ -53,25 +59,47 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
   onSubMenuClick = (event: React.MouseEvent) => {
     event.stopPropagation();
     const { eventKey, openKeys } = this.props;
-    if (this.props.updateOpenKeys && eventKey) {
+    if (this.props.updateOpenKeys) {
       this.props.updateOpenKeys(eventKey, !openKeys.includes(eventKey));
     }
   };
 
   onTitleMouseAction = (mouse: boolean) => {
     const { eventKey } = this.props;
-    if (this.props.updateActiveKeys && eventKey) {
+    if (this.props.updateActiveKeys) {
       this.props.updateActiveKeys(eventKey, mouse);
     }
   };
 
+  getSubMenuEvents = (): {} => {
+    const { mode } = this.props;
+    if (mode === 'vertical' || mode === 'horizontal') {
+      return {
+        onMouseEnter: () => this.onSubMenuMouseAction(true),
+        onMouseLeave: () => this.onSubMenuMouseAction(false),
+      };
+    }
+    return {
+      onClick: (event: React.MouseEvent) => this.onSubMenuClick(event),
+    };
+  };
+
+  getEventKey = (element: React.ReactElement): string => {
+    const { props, key } = element;
+    if (props || key) {
+      return props.eventKey || key;
+    }
+    return '';
+  };
+
   getChildren = (): ReactElement[] => {
-    const { children, mode } = this.props;
+    const { children, mode, overflowed } = this.props;
     if (children) {
-      return React.Children.map(children as ReactElement[], item =>
+      return React.Children.map(children, item =>
         React.cloneElement(item, {
           mode: mode === 'inline' ? 'inline' : 'vertical',
-          eventKey: item.props.eventKey || item.key,
+          eventKey: this.getEventKey(item),
+          overflowed,
         }),
       );
     }
@@ -80,15 +108,10 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
 
   getArrowIcon = () => {
     const { mode, prefixCls } = this.props;
-    const types: {
-      [key: string]: string;
-    } = {
-      horizontal: '',
-      vertical: 'right',
-      inline: 'down',
-    };
-    if (mode && types[mode]) {
-      return <Icon type={types[mode]} className={`${prefixCls}-arrow`} />;
+    if (mode && arrowIconTypes[mode]) {
+      return (
+        <Icon type={arrowIconTypes[mode]} className={`${prefixCls}-arrow`} />
+      );
     }
     return null;
   };
@@ -98,7 +121,7 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
     keys: string[] = [],
   ): string[] => {
     React.Children.forEach(children, item => {
-      const key: string | undefined = item.props?.eventKey || item.key;
+      const key: string = this.getEventKey(item);
       if (key) {
         keys.push(key);
       }
@@ -127,39 +150,38 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
       mode,
       style,
     } = this.props;
+
     const children = this.getChildren();
-    const isOpen = eventKey
-      ? openKeys.includes(eventKey) && !overflowed
-      : false;
-    const isActive = eventKey
-      ? activeKeys.includes(eventKey) && !overflowed
-      : false;
-    const classes = classNames(
-      prefixCls,
-      `${prefixCls}-submenu`,
-      {
-        [`${prefixCls}-submenu-open`]: isOpen,
-        [`${prefixCls}-submenu-active`]: isActive,
-        [`${prefixCls}-submenu-selected`]: this.isChildrenSelected(children),
-      },
-      className,
-    );
-    const eventAction: {
-      [key: string]: any;
-    } = {};
-    if (mode === 'vertical' || mode === 'horizontal') {
-      eventAction.onMouseEnter = () => this.onSubMenuMouseAction(true);
-      eventAction.onMouseLeave = () => this.onSubMenuMouseAction(false);
-    } else if (mode === 'inline') {
-      eventAction.onClick = (event: React.MouseEvent) =>
-        this.onSubMenuClick(event);
+    const subMenuEvents = this.getSubMenuEvents();
+    const isOpen = openKeys.includes(eventKey) && !overflowed;
+    const isActive = activeKeys.includes(eventKey) && !overflowed;
+    const classes = classNames(className, `${prefixCls}-submenu`, {
+      [`${prefixCls}-submenu-open`]: isOpen,
+      [`${prefixCls}-submenu-active`]: isActive,
+      [`${prefixCls}-submenu-selected`]: this.isChildrenSelected(children),
+    });
+
+    let renderChildren = null;
+    if (mode === 'inline') {
+      renderChildren = (
+        <ul className="pq-antd-menu pq-antd-menu-inline pq-antd-menu-light">
+          {children}
+        </ul>
+      );
+    } else {
+      renderChildren = (
+        <PopupMenu visible={isOpen} parentNode={this.subMenuRef} mode={mode}>
+          {children}
+        </PopupMenu>
+      );
     }
+
     return (
       <li
         className={classes}
         ref={this.subMenuRef}
         style={style}
-        {...eventAction}
+        {...subMenuEvents}
       >
         <div
           className={`${prefixCls}-submenu-title`}
@@ -169,15 +191,7 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
           {title}
           {this.getArrowIcon()}
         </div>
-        {mode === 'inline' ? (
-          <ul className="pq-antd-menu pq-antd-menu-inline pq-antd-menu-light">
-            {children}
-          </ul>
-        ) : (
-          <PopupMenu visible={isOpen} parentNode={this.subMenuRef} mode={mode}>
-            {children}
-          </PopupMenu>
-        )}
+        {renderChildren}
       </li>
     );
   }

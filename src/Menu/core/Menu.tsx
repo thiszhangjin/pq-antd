@@ -1,4 +1,4 @@
-import React, { ReactElement, Children } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { Provider, create } from 'mini-store';
 import MenuItem from './MenuItem';
@@ -46,6 +46,7 @@ export interface MenuProps {
   subMenuCloseDelay?: number;
   subMenuOpenDelay?: number;
   focusable?: boolean;
+  children?: React.ReactElement[];
   onMouseEnter?: (e: MouseEvent) => void;
   getPopupContainer?: (triggerNode: HTMLElement) => HTMLElement;
   overflowedIndicator?: React.ReactNode;

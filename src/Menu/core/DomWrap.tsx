@@ -6,7 +6,7 @@ import SubMenu from './SubMenu';
 export interface DomWrapProps {
   prefixCls?: string;
   className?: string;
-  children?: React.ReactNode;
+  children?: React.ReactElement[];
   mode?: MenuMode;
   style?: React.CSSProperties;
 }
@@ -71,22 +71,22 @@ export default class DomWrap extends React.Component<
 
     [...children].some((item, index) => {
       const isOverflowed = item.className.includes('overflowed');
+
       if (isOverflowed) {
-        item.style.display = 'inline-block';
+        (item as HTMLElement).style.display = 'inline-block';
       }
 
       const { width } = item.getBoundingClientRect();
+      totalChildrenWidth += width;
 
       if (isOverflowed) {
-        item.style.display = 'none';
+        (item as HTMLElement).style.display = 'none';
       }
-      totalChildrenWidth += width;
 
       if (totalChildrenWidth > menuElementWidth) {
         lastVisibleIndex = index - 1;
         return true;
       }
-
       return false;
     });
 
@@ -98,24 +98,20 @@ export default class DomWrap extends React.Component<
   getOverflowedSubMenuItem = (
     overflowedItems: React.ReactNode[],
   ): React.ReactNode => {
-    let style: React.CSSProperties = {};
+    const style: React.CSSProperties = {
+      display: 'none',
+    };
 
     if (overflowedItems.length > 0) {
-      style = {
-        visibility: 'visible',
-      };
-    } else {
-      style = {
-        display: 'none',
-      };
+      style.visibility = 'visible';
     }
 
     return (
       <SubMenu
         title="..."
         style={style}
-        key="overflowed"
-        eventKey="overflowed"
+        key="SubMenu-overflowed"
+        eventKey="SubMenu-overflowed"
         mode="horizontal"
       >
         {overflowedItems}
@@ -126,16 +122,16 @@ export default class DomWrap extends React.Component<
   getChildren = () => {
     const { children, prefixCls, mode } = this.props;
     const { lastVisibleIndex } = this.state;
-    const overflowedItems: React.ReactNode[] = [];
+    const overflowedItems: React.ReactElement[] = [];
     const overflowedStyle: React.CSSProperties = {
       display: 'none',
     };
-    const originChildren: React.ReactNode[] = React.Children.map(
-      children,
-      (item, index) => {
+    const originChildren: React.ReactElement[] = React.Children.map(
+      children as React.ReactElement[],
+      (item: React.ReactElement, index) => {
         const baseProps = {
           mode,
-          eventKey: item.key,
+          eventKey: item!.key,
         };
         if (index > lastVisibleIndex && lastVisibleIndex > -1) {
           overflowedItems.push(item);
@@ -148,7 +144,7 @@ export default class DomWrap extends React.Component<
         }
         return React.cloneElement(item as React.ReactElement, { ...baseProps });
       },
-    ) as React.ReactNode[];
+    ) as React.ReactElement[];
 
     const overflowedSubMenu = this.getOverflowedSubMenuItem(overflowedItems);
 
