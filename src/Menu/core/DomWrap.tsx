@@ -96,14 +96,14 @@ export default class DomWrap extends React.Component<
   };
 
   getOverflowedSubMenuItem = (
-    overflowedItems: React.ReactNode[],
+    overflowedItems: React.ReactElement[],
   ): React.ReactNode => {
     const style: React.CSSProperties = {
       display: 'none',
     };
 
     if (overflowedItems.length > 0) {
-      style.visibility = 'visible';
+      style.display = 'inline-block';
     }
 
     return (
