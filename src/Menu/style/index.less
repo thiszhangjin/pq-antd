@@ -43,7 +43,12 @@
       }
       &-submenu {
         &-open {
-          & > .pq-antd-menu-inline {
+          & > .@{menu}-submenu-title {
+            .@{menu}-arrow {
+              transform: rotateX(180deg);
+            }
+          }
+          & > .@{menu}-inline {
             display: block;
           }
         }
@@ -103,6 +108,7 @@
     margin-top: -5px;
     padding: 0 !important;
     font-size: 10px;
+    transition: all ease 0.5s;
   }
   &-placement {
     &-bottom-left,

@@ -141,6 +141,7 @@ export default class DomWrap extends React.Component<
           overflowedItems.push(item);
           return React.cloneElement(item as React.ReactElement, {
             className: `${prefixCls}-item-overflowed`,
+            overflowed: true,
             style: overflowedStyle,
             ...baseProps,
           });

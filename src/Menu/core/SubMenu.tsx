@@ -13,6 +13,7 @@ export interface SubMenuProps {
   disabled?: boolean;
   eventKey?: string;
   title?: string | React.ReactNode;
+  overflowed?: boolean;
   mode?: MenuMode;
   selectedKeys: string[];
   activeKeys: string[];
@@ -77,15 +78,17 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
     return [];
   };
 
-  getArrowIcon = (isOpen: boolean) => {
+  getArrowIcon = () => {
     const { mode, prefixCls } = this.props;
-    if (mode === 'inline') {
-      return (
-        <Icon type={isOpen ? 'up' : 'down'} className={`${prefixCls}-arrow`} />
-      );
-    }
-    if (mode === 'vertical') {
-      return <Icon type="right" className={`${prefixCls}-arrow`} />;
+    const types: {
+      [key: string]: string;
+    } = {
+      horizontal: '',
+      vertical: 'right',
+      inline: 'down',
+    };
+    if (mode && types[mode]) {
+      return <Icon type={types[mode]} className={`${prefixCls}-arrow`} />;
     }
     return null;
   };
@@ -115,6 +118,7 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
   render() {
     const {
       prefixCls,
+      overflowed,
       eventKey,
       activeKeys,
       openKeys,
@@ -124,8 +128,12 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
       style,
     } = this.props;
     const children = this.getChildren();
-    const isOpen = eventKey ? openKeys.includes(eventKey) : false;
-    const isActive = eventKey ? activeKeys.includes(eventKey) : false;
+    const isOpen = eventKey
+      ? openKeys.includes(eventKey) && !overflowed
+      : false;
+    const isActive = eventKey
+      ? activeKeys.includes(eventKey) && !overflowed
+      : false;
     const classes = classNames(
       prefixCls,
       `${prefixCls}-submenu`,
@@ -159,7 +167,7 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
           onMouseLeave={() => this.onTitleMouseAction(false)}
         >
           {title}
-          {this.getArrowIcon(isOpen)}
+          {this.getArrowIcon()}
         </div>
         {mode === 'inline' ? (
           <ul className="pq-antd-menu pq-antd-menu-inline pq-antd-menu-light">
