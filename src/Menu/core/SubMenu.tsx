@@ -11,13 +11,13 @@ export interface SubMenuProps {
   popupClassName?: string;
   children?: React.ReactElement[];
   disabled?: boolean;
-  eventKey: string;
+  eventKey?: string;
   title?: string | React.ReactNode;
   overflowed?: boolean;
   mode?: MenuMode;
-  selectedKeys: string[];
-  activeKeys: string[];
-  openKeys: string[];
+  selectedKeys?: string[];
+  activeKeys?: string[];
+  openKeys?: string[];
   style?: React.CSSProperties;
   onTitleClick?: () => void;
   updateActiveKeys?: (key: string, active: boolean) => void;
@@ -25,7 +25,7 @@ export interface SubMenuProps {
 }
 interface SubMenuState {}
 
-enum arrowIconTypes {
+enum ArrowIconTypes {
   'horizontal' = '',
   'vertical' = 'right',
   'inline' = 'down',
@@ -51,7 +51,7 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
 
   onSubMenuMouseAction = (mouse: boolean) => {
     const { eventKey } = this.props;
-    if (this.props.updateOpenKeys) {
+    if (this.props.updateOpenKeys && eventKey) {
       this.props.updateOpenKeys(eventKey, mouse);
     }
   };
@@ -59,20 +59,23 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
   onSubMenuClick = (event: React.MouseEvent) => {
     event.stopPropagation();
     const { eventKey, openKeys } = this.props;
-    if (this.props.updateOpenKeys) {
+    if (this.props.updateOpenKeys && eventKey && openKeys) {
       this.props.updateOpenKeys(eventKey, !openKeys.includes(eventKey));
     }
   };
 
   onTitleMouseAction = (mouse: boolean) => {
     const { eventKey } = this.props;
-    if (this.props.updateActiveKeys) {
+    if (this.props.updateActiveKeys && eventKey) {
       this.props.updateActiveKeys(eventKey, mouse);
     }
   };
 
   getSubMenuEvents = (): {} => {
-    const { mode } = this.props;
+    const { mode, disabled } = this.props;
+    if (disabled) {
+      return {};
+    }
     if (mode === 'vertical' || mode === 'horizontal') {
       return {
         onMouseEnter: () => this.onSubMenuMouseAction(true),
@@ -81,6 +84,17 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
     }
     return {
       onClick: (event: React.MouseEvent) => this.onSubMenuClick(event),
+    };
+  };
+
+  getSubMenuTitleEvents = () => {
+    const { disabled } = this.props;
+    if (disabled) {
+      return {};
+    }
+    return {
+      onMouseEnter: () => this.onTitleMouseAction(true),
+      onMouseLeave: () => this.onTitleMouseAction(false),
     };
   };
 
@@ -108,9 +122,9 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
 
   getArrowIcon = () => {
     const { mode, prefixCls } = this.props;
-    if (mode && arrowIconTypes[mode]) {
+    if (mode && ArrowIconTypes[mode]) {
       return (
-        <Icon type={arrowIconTypes[mode]} className={`${prefixCls}-arrow`} />
+        <Icon type={ArrowIconTypes[mode]} className={`${prefixCls}-arrow`} />
       );
     }
     return null;
@@ -135,30 +149,41 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
   isChildrenSelected = (children: ReactElement[]): boolean => {
     const { selectedKeys } = this.props;
     const keys = this.getChildrenKeys(children);
-    return selectedKeys.some(item => keys.includes(item));
+    if (selectedKeys) {
+      return selectedKeys.some(item => keys.includes(item));
+    }
+    return false;
+  };
+
+  isOpen = (): boolean => {
+    const { openKeys, eventKey, overflowed } = this.props;
+    if (openKeys && eventKey) {
+      return openKeys.includes(eventKey) && !overflowed;
+    }
+    return false;
+  };
+
+  isActive = (): boolean => {
+    const { activeKeys, eventKey, overflowed } = this.props;
+    if (activeKeys && eventKey) {
+      return activeKeys.includes(eventKey) && !overflowed;
+    }
+    return false;
   };
 
   render() {
-    const {
-      prefixCls,
-      overflowed,
-      eventKey,
-      activeKeys,
-      openKeys,
-      className,
-      title,
-      mode,
-      style,
-    } = this.props;
+    const { prefixCls, className, title, mode, disabled, style } = this.props;
 
     const children = this.getChildren();
     const subMenuEvents = this.getSubMenuEvents();
-    const isOpen = openKeys.includes(eventKey) && !overflowed;
-    const isActive = activeKeys.includes(eventKey) && !overflowed;
+    const subMenuTitleEvents = this.getSubMenuTitleEvents();
+    const isOpen = this.isOpen();
+    const isActive = this.isActive();
     const classes = classNames(className, `${prefixCls}-submenu`, {
       [`${prefixCls}-submenu-open`]: isOpen,
       [`${prefixCls}-submenu-active`]: isActive,
       [`${prefixCls}-submenu-selected`]: this.isChildrenSelected(children),
+      [`${prefixCls}-submenu-disabled`]: disabled,
     });
 
     let renderChildren = null;
@@ -183,11 +208,7 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
         style={style}
         {...subMenuEvents}
       >
-        <div
-          className={`${prefixCls}-submenu-title`}
-          onMouseEnter={() => this.onTitleMouseAction(true)}
-          onMouseLeave={() => this.onTitleMouseAction(false)}
-        >
+        <div className={`${prefixCls}-submenu-title`} {...subMenuTitleEvents}>
           {title}
           {this.getArrowIcon()}
         </div>

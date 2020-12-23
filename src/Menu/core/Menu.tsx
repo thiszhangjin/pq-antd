@@ -23,34 +23,33 @@ export interface ClickParam {
 }
 export interface MenuProps {
   id?: string;
-  theme?: MenuTheme;
+  // theme?: MenuTheme;
   mode?: MenuMode;
-  selectable?: boolean;
+  // selectable?: boolean;
   selectedKeys?: Array<string>;
   defaultSelectedKeys?: Array<string>;
   openKeys?: Array<string>;
   defaultOpenKeys?: Array<string>;
   onOpenChange?: (openKeys: string[]) => void;
   onSelect?: (param: SelectParam) => void;
-  onDeselect?: (param: SelectParam) => void;
+  // onDeselect?: (param: SelectParam) => void;
   onClick?: (param: ClickParam) => void;
   style?: React.CSSProperties;
-  openAnimation?: string;
-  openTransitionName?: string;
+  // openAnimation?: string;
+  // openTransitionName?: string;
   motion?: Object;
   className?: string;
   prefixCls?: string;
-  multiple?: boolean;
-  inlineIndent?: number;
-  inlineCollapsed?: boolean;
-  subMenuCloseDelay?: number;
-  subMenuOpenDelay?: number;
-  focusable?: boolean;
+  // multiple?: boolean;
+  // inlineIndent?: number;
+  // inlineCollapsed?: boolean;
+  // subMenuCloseDelay?: number;
+  // subMenuOpenDelay?: number;
   children?: React.ReactElement[];
-  onMouseEnter?: (e: MouseEvent) => void;
-  getPopupContainer?: (triggerNode: HTMLElement) => HTMLElement;
-  overflowedIndicator?: React.ReactNode;
-  forceSubMenuRender?: boolean;
+  // onMouseEnter?: (e: MouseEvent) => void;
+  // getPopupContainer?: (triggerNode: HTMLElement) => HTMLElement;
+  // overflowedIndicator?: React.ReactNode;
+  // forceSubMenuRender?: boolean;
 }
 interface MenuState {}
 
@@ -92,6 +91,9 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
   }
 
   onClick = (key: string) => {
+    /**
+     * to-do onSelect
+     */
     this.store.setState({
       selectedKeys: [key],
     });
@@ -104,12 +106,20 @@ export default class Menu extends React.Component<MenuProps, MenuState> {
   };
 
   updateOpenKeys = (key: string, open: boolean) => {
+    const { onOpenChange } = this.props;
     const { openKeys } = this.store.getState();
+    let newOpenKeys = [];
+    if (open) {
+      newOpenKeys = [...openKeys, key];
+    } else {
+      newOpenKeys = openKeys.filter((item: string) => item !== key);
+    }
     this.store.setState({
-      openKeys: open
-        ? [...openKeys, key]
-        : openKeys.filter((item: string) => item !== key),
+      openKeys: newOpenKeys,
     });
+    if (onOpenChange) {
+      onOpenChange(newOpenKeys);
+    }
   };
 
   render() {

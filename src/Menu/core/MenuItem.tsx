@@ -8,9 +8,9 @@ export interface MenuItemProps {
   disabled?: boolean;
   eventKey?: string;
   title?: string;
-  selectedKeys: string[];
-  activeKeys: string[];
-  openKeys: string[];
+  selectedKeys?: string[];
+  activeKeys?: string[];
+  openKeys?: string[];
   style?: React.CSSProperties;
   onClick?: (key: string) => void;
   updateActiveKeys?: (key: string, active: boolean) => void;
@@ -47,29 +47,39 @@ export default class extends React.Component<MenuItemProps, MenuItemState> {
     }
   };
 
+  getMenuEvents = () => {
+    const { disabled } = this.props;
+    if (disabled) {
+      return {};
+    }
+    return {
+      onMouseEnter: () => this.onMouseAction(true),
+      onMouseLeave: () => this.onMouseAction(false),
+      onClick: (event: React.MouseEvent) => this.onClick(event),
+    };
+  };
+
   render() {
     const {
       prefixCls,
       className,
       children,
+      disabled,
       selectedKeys,
       eventKey,
       activeKeys,
       style,
     } = this.props;
     const classes = classNames(className, `${prefixCls}-item`, {
-      [`${prefixCls}-item-active`]: eventKey && activeKeys.includes(eventKey),
+      [`${prefixCls}-item-active`]:
+        eventKey && activeKeys && activeKeys.includes(eventKey),
       [`${prefixCls}-item-selected`]:
-        eventKey && selectedKeys.includes(eventKey),
+        eventKey && selectedKeys && selectedKeys.includes(eventKey),
+      [`${prefixCls}-item-disabled`]: disabled,
     });
+    const menuEvents = this.getMenuEvents();
     return (
-      <li
-        className={classes}
-        style={style}
-        onMouseEnter={() => this.onMouseAction(true)}
-        onMouseLeave={() => this.onMouseAction(false)}
-        onClick={event => this.onClick(event)}
-      >
+      <li className={classes} style={style} {...menuEvents}>
         {children}
       </li>
     );

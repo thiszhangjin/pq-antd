@@ -5,16 +5,7 @@ import { Menu } from '../../index';
 const { SubMenu } = Menu;
 
 class App extends React.Component {
-  state = {
-    current: 'mail',
-  };
-
-  handleClick = e => {
-    console.log('click ', e);
-    this.setState({
-      current: e.key,
-    });
-  };
+  state = {};
 
   render() {
     return (
@@ -23,7 +14,7 @@ class App extends React.Component {
           <Icon type="mail" />
           Navigation One
         </Menu.Item>
-        <Menu.Item key="menu2" disabled>
+        <Menu.Item key="menu2">
           <Icon type="appstore" />
           Navigation Two
         </Menu.Item>
@@ -49,11 +40,11 @@ class App extends React.Component {
               </span>
             }
           >
-            <Menu.Item key="menu4" disabled>
+            <Menu.Item key="menu4">
               <Icon type="appstore" />
               Navigation1
             </Menu.Item>
-            <Menu.Item key="menu5" disabled>
+            <Menu.Item key="menu5">
               <Icon type="appstore" />
               Navigation2
             </Menu.Item>
