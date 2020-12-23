@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon } from 'antd';
-import { Menu } from '../../index';
+import { Menu } from 'pq-antd';
 
 const { SubMenu } = Menu;
 
