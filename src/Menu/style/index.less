@@ -40,7 +40,6 @@
       &-inline {
         margin: 0;
         padding-left: 25px;
-        display: none;
         border-right: none;
       }
       &-submenu {
@@ -118,7 +117,7 @@
     margin-top: -5px;
     padding: 0 !important;
     font-size: 10px;
-    transition: all ease 0.5s;
+    transition: all ease 0.3s;
   }
   &-placement {
     &-bottom-left,
@@ -148,6 +147,65 @@
         height: 100%;
         right: -3px;
       }
+    }
+  }
+  &-collapse {
+    overflow: hidden;
+    transition: height 0.3s ease-out;
+  }
+  &-hidden {
+    display: none;
+  }
+  .effect() {
+    animation-duration: 0.3s;
+    animation-timing-function: cubic-bezier(0.08, 0.82, 0.17, 1);
+    transform-origin: 0 0;
+  }
+  &-zoom-enter,
+  &-zoom-appear {
+    .effect();
+    opacity: 0;
+    animation-play-state: paused;
+  }
+
+  &-zoom-leave {
+    .effect();
+    opacity: 1;
+    animation-play-state: paused;
+  }
+
+  &-zoom-enter&-zoom-enter-active {
+    animation-name: rcMenuOpenSlideUpIn;
+    animation-play-state: running;
+  }
+
+  &-zoom-leave&-zoom-leave-active {
+    animation-name: rcMenuOpenSlideUpOut;
+    animation-play-state: running;
+  }
+
+  @keyframes rcMenuOpenSlideUpIn {
+    0% {
+      opacity: 0;
+      transform-origin: 0% 0%;
+      transform: scaleY(0);
+    }
+    100% {
+      opacity: 1;
+      transform-origin: 0% 0%;
+      transform: scaleY(1);
+    }
+  }
+  @keyframes rcMenuOpenSlideUpOut {
+    0% {
+      opacity: 1;
+      transform-origin: 0% 0%;
+      transform: scaleY(1);
+    }
+    100% {
+      opacity: 0;
+      transform-origin: 0% 0%;
+      transform: scaleY(0);
     }
   }
 }

@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import classNames from 'classnames';
 import { Icon } from 'antd';
 import { connect } from 'mini-store';
+import CSSMotion from 'rc-animate/lib/CSSMotion';
 import PopupMenu from './PopupMenu';
 import { MenuMode } from './Menu';
 
@@ -30,6 +31,13 @@ enum ArrowIconTypes {
   'vertical' = 'right',
   'inline' = 'down',
 }
+
+const collapseNode = () => ({ height: 0 });
+const expandNode = (node: HTMLElement) => {
+  return {
+    height: node.scrollHeight,
+  };
+};
 
 @connect(state => ({
   selectedKeys: state.selectedKeys,
@@ -189,9 +197,31 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
     let renderChildren = null;
     if (mode === 'inline') {
       renderChildren = (
-        <ul className="pq-antd-menu pq-antd-menu-inline pq-antd-menu-light">
-          {children}
-        </ul>
+        <CSSMotion
+          visible={isOpen}
+          motionName={`${prefixCls}-collapse`}
+          leavedClassName={`${prefixCls}-hidden`}
+          removeOnLeave={false}
+          onAppearStart={collapseNode}
+          onAppearActive={expandNode}
+          onEnterStart={collapseNode}
+          onEnterActive={expandNode}
+          onLeaveStart={expandNode}
+          onLeaveActive={collapseNode}
+        >
+          {({ style, className }, ref) => (
+            <ul
+              style={style}
+              ref={ref}
+              className={classNames(
+                'pq-antd-menu pq-antd-menu-inline pq-antd-menu-light',
+                className,
+              )}
+            >
+              {children}
+            </ul>
+          )}
+        </CSSMotion>
       );
     } else {
       renderChildren = (
