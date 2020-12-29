@@ -132,6 +132,7 @@ export default class DomWrap extends React.Component<
         const baseProps = {
           mode,
           eventKey: item!.key,
+          level: 0,
         };
         if (index > lastVisibleIndex && lastVisibleIndex > -1) {
           overflowedItems.push(item);

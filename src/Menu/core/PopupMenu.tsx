@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
+import CSSMotion from 'rc-animate/lib/CSSMotion';
 import { MenuMode } from './Menu';
 
 export interface PopupMenuProps {
@@ -9,6 +10,7 @@ export interface PopupMenuProps {
   visible?: boolean;
   parentNode?: React.RefObject<any>;
   mode?: MenuMode;
+  level?: number;
   children?: React.ReactNode;
 }
 interface PopupMenuState {
@@ -98,18 +100,19 @@ export default class PopupMenu extends React.Component<
     const { mode } = this.props;
     const { top, left, width, height } = this.parentElementClientRect;
     const menuWidth = this.getMenuStyle().width;
+    const popupMenuSpacing = 5;
     if (mode === 'horizontal') {
       if (left + menuWidth <= window.innerWidth) {
         this.placementClassName = 'bottom-left';
         return {
           left,
-          top: top + height,
+          top: top + height + popupMenuSpacing,
         };
       }
       this.placementClassName = 'bottom-right';
       return {
         left: left + width - menuWidth,
-        top: top + height,
+        top: top + height + popupMenuSpacing,
       };
     }
 
@@ -117,19 +120,19 @@ export default class PopupMenu extends React.Component<
       if (width + left + menuWidth <= window.innerWidth) {
         this.placementClassName = 'right-top';
         return {
-          left: left + width,
+          left: left + width + popupMenuSpacing,
           top,
         };
       }
       this.placementClassName = 'left-top';
       return {
-        left: left - menuWidth,
+        left: left - menuWidth - popupMenuSpacing,
         top,
       };
     }
 
     return {
-      left: left + width,
+      left: left + width + popupMenuSpacing,
       top,
     };
   };
@@ -151,15 +154,15 @@ export default class PopupMenu extends React.Component<
 
   getStyle = () => {
     const { top, left } = this.getCoordinate();
-    const { visible, mode } = this.props;
+    const { visible, mode, level = 0 } = this.props;
     const { width } = this.parentElementClientRect;
     const targetStyle: React.CSSProperties = {
       visibility: visible ? 'visible' : 'hidden',
     };
-
     if (visible) {
       targetStyle.top = top;
       targetStyle.left = left;
+      targetStyle.zIndex = 1050 + level;
     }
     if (mode === 'horizontal') {
       targetStyle.minWidth = `${width}px`;
@@ -180,15 +183,28 @@ export default class PopupMenu extends React.Component<
   };
 
   renderMenu = () => {
-    const { children } = this.props;
+    const { children, prefixCls, visible } = this.props;
     const { menuStyle } = this.state;
 
     const classes = this.getClasses();
 
     return (
-      <ul className={classes} style={menuStyle} ref={this.menuRef}>
-        {children}
-      </ul>
+      <CSSMotion
+        visible={visible}
+        motionName={`${prefixCls}-zoom`}
+        leavedClassName={`${prefixCls}-hidden`}
+        removeOnLeave={false}
+      >
+        {({ style, className }) => (
+          <ul
+            className={classNames(classes, className)}
+            style={{ ...menuStyle, ...style }}
+            ref={this.menuRef}
+          >
+            {children}
+          </ul>
+        )}
+      </CSSMotion>
     );
   };
 

@@ -19,6 +19,7 @@ export interface SubMenuProps {
   selectedKeys?: string[];
   activeKeys?: string[];
   openKeys?: string[];
+  level?: number;
   style?: React.CSSProperties;
   onTitleClick?: () => void;
   updateActiveKeys?: (key: string, active: boolean) => void;
@@ -115,13 +116,14 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
   };
 
   getChildren = (): ReactElement[] => {
-    const { children, mode, overflowed } = this.props;
+    const { children, mode, overflowed, level = 0 } = this.props;
     if (children) {
       return React.Children.map(children, item =>
         React.cloneElement(item, {
           mode: mode === 'inline' ? 'inline' : 'vertical',
           eventKey: this.getEventKey(item),
           overflowed,
+          level: level + 1,
         }),
       );
     }
@@ -180,7 +182,15 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
   };
 
   render() {
-    const { prefixCls, className, title, mode, disabled, style } = this.props;
+    const {
+      prefixCls,
+      className,
+      title,
+      mode,
+      disabled,
+      level,
+      style,
+    } = this.props;
 
     const children = this.getChildren();
     const subMenuEvents = this.getSubMenuEvents();
@@ -209,10 +219,9 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
           onLeaveStart={expandNode}
           onLeaveActive={collapseNode}
         >
-          {({ style, className }, ref) => (
+          {({ style, className }) => (
             <ul
               style={style}
-              ref={ref}
               className={classNames(
                 'pq-antd-menu pq-antd-menu-inline pq-antd-menu-light',
                 className,
@@ -225,7 +234,12 @@ export default class extends React.Component<SubMenuProps, SubMenuState> {
       );
     } else {
       renderChildren = (
-        <PopupMenu visible={isOpen} parentNode={this.subMenuRef} mode={mode}>
+        <PopupMenu
+          visible={isOpen}
+          parentNode={this.subMenuRef}
+          mode={mode}
+          level={level}
+        >
           {children}
         </PopupMenu>
       );

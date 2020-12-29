@@ -1,7 +1,7 @@
 @import '../../style/default.less';
 
 @menu: ~'@{prefix}-menu';
-@popup-menu-spacing: 3px;
+@popup-menu-spacing: 5px;
 
 #triggerContainer {
   position: absolute;
@@ -11,10 +11,16 @@
 }
 
 .placement-before() {
-  content: '';
-  display: block;
   position: absolute;
-  z-index: 999;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  opacity: 0.0001;
+  content: ' ';
 }
 
 .@{menu} {
@@ -46,7 +52,7 @@
         &-open {
           & > .@{menu}-submenu-title {
             .@{menu}-arrow {
-              transform: rotateX(180deg);
+              transform: rotate(180deg);
             }
           }
           & > .@{menu}-inline {
@@ -122,30 +128,21 @@
   &-placement {
     &-bottom-left,
     &-bottom-right {
-      transform: translateY(@popup-menu-spacing);
       &::before {
         .placement-before();
-        width: 100%;
-        height: @popup-menu-spacing;
         top: -@popup-menu-spacing;
       }
     }
     &-right-top {
-      transform: translateX(@popup-menu-spacing);
       &::before {
         .placement-before();
-        width: 3px;
-        height: 100%;
-        left: -3px;
+        left: -@popup-menu-spacing;
       }
     }
     &-left-top {
-      transform: translateX(-@popup-menu-spacing);
       &::before {
         .placement-before();
-        width: 3px;
-        height: 100%;
-        right: -3px;
+        left: @popup-menu-spacing;
       }
     }
   }
@@ -212,7 +209,7 @@
 .@{menu}-sub {
   min-width: 200px;
   position: fixed;
-  z-index: 999;
+  z-index: 1050;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   background: #fff;
 }
