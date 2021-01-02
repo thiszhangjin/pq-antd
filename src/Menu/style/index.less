@@ -1,7 +1,9 @@
 @import '../../style/default.less';
 
 @menu: ~'@{prefix}-menu';
+@menu-border: #e8e8e8;
 @popup-menu-spacing: 5px;
+@animate-time: 0.3s;
 
 #triggerContainer {
   position: absolute;
@@ -30,14 +32,18 @@
   user-select: none;
   &-horizontal {
     height: 48px;
-    border-bottom: 1px solid #e8e8e8;
+    border-bottom: 1px solid @menu-border;
     .@{menu}-item,
     .@{menu}-submenu {
+      min-width: 100px;
       display: inline-block;
       &-active,
       &-selected {
-        color: #1890ff;
-        border-bottom: 2px solid #1890ff;
+        color: @color-primary;
+        border-bottom: 2px solid @color-primary;
+      }
+      &-title {
+        text-align: center;
       }
     }
   }
@@ -64,13 +70,13 @@
   }
   &-vertical,
   &-inline {
-    border-right: 1px solid #e8e8e8;
+    border-right: 1px solid @menu-border;
     .@{menu}-item {
       width: 100%;
       .text-overflow();
       &-active,
       &-selected {
-        color: #1890ff;
+        color: @color-primary;
       }
     }
     .@{menu}-submenu {
@@ -80,7 +86,7 @@
       &-active,
       &-selected {
         & > div {
-          color: #1890ff;
+          color: @color-primary;
         }
       }
     }
@@ -92,7 +98,7 @@
     white-space: nowrap;
     cursor: pointer;
     position: relative;
-    transition: color ease 0.3s;
+    transition: color ease @animate-time;
     .anticon {
       padding-right: 10px;
     }
@@ -123,7 +129,7 @@
     margin-top: -5px;
     padding: 0 !important;
     font-size: 10px;
-    transition: all ease 0.3s;
+    transition: all ease @animate-time;
   }
   &-placement {
     &-bottom-left,
@@ -148,13 +154,13 @@
   }
   &-collapse {
     overflow: hidden;
-    transition: height 0.3s ease-out;
+    transition: height @animate-time ease-out;
   }
   &-hidden {
     display: none;
   }
   .effect() {
-    animation-duration: 0.3s;
+    animation-duration: @animate-time;
     animation-timing-function: cubic-bezier(0.08, 0.82, 0.17, 1);
     transform-origin: 0 0;
   }

@@ -19,7 +19,7 @@ export default class DomWrap extends React.Component<
   DomWrapState
 > {
   public readonly state: Readonly<DomWrapState> = {
-    lastVisibleIndex: -1,
+    lastVisibleIndex: -2,
   };
 
   public menuRef = React.createRef<HTMLUListElement>();
@@ -67,10 +67,11 @@ export default class DomWrap extends React.Component<
 
     let totalChildrenWidth = 0;
 
-    let lastVisibleIndex = -1;
+    let lastVisibleIndex = -2;
 
     [...children].some((item, index) => {
       const isOverflowed = item.className.includes('overflowed');
+      const isLastChildren = index === children.length - 2;
 
       if (isOverflowed) {
         (item as HTMLElement).style.display = 'inline-block';
@@ -83,10 +84,14 @@ export default class DomWrap extends React.Component<
         (item as HTMLElement).style.display = 'none';
       }
 
-      if (totalChildrenWidth > menuElementWidth) {
+      if (
+        (!isLastChildren && totalChildrenWidth > menuElementWidth - 100) ||
+        (isLastChildren && totalChildrenWidth > menuElementWidth)
+      ) {
         lastVisibleIndex = index - 1;
         return true;
       }
+
       return false;
     });
 
@@ -134,7 +139,7 @@ export default class DomWrap extends React.Component<
           eventKey: item!.key,
           level: 0,
         };
-        if (index > lastVisibleIndex && lastVisibleIndex > -1) {
+        if (index > lastVisibleIndex && lastVisibleIndex > -2) {
           overflowedItems.push(item);
           return React.cloneElement(item as React.ReactElement, {
             className: `${prefixCls}-item-overflowed`,
