@@ -1,6 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Icon } from 'antd';
+import { Icon, Select } from 'antd';
+
+const { Option } = Select;
 
 export interface PaginationProps {
   total?: number;
@@ -56,6 +58,7 @@ export default class Pagination extends React.Component<
     total: 0,
     defaultPageSize: 10,
     prefixCls: 'pq-antd-pagination',
+    pageSizeOptions: [10, 20, 50, 100],
     showPrevNextJumpers: true,
     showTitle: true,
     style: {},
@@ -96,9 +99,9 @@ export default class Pagination extends React.Component<
     });
   };
 
-  prev = () => {
+  prev = (count: number = 1) => {
     const { current } = this.state;
-    this.changeCurrent(Math.max(1, current - 1));
+    this.changeCurrent(Math.max(1, current - count));
   };
 
   hasPrev = (): boolean => {
@@ -110,9 +113,9 @@ export default class Pagination extends React.Component<
     return <Icon type="left" />;
   };
 
-  next = () => {
+  next = (count: number = 1) => {
     const { pageTotal, current } = this.state;
-    this.changeCurrent(Math.min(pageTotal, current + 1));
+    this.changeCurrent(Math.min(pageTotal, current + count));
   };
 
   hasNext = (): boolean => {
@@ -134,11 +137,50 @@ export default class Pagination extends React.Component<
     return pageTotal - current >= 4;
   };
 
+  renderJumpPrev = (): React.ReactNode => {
+    const { prefixCls } = this.props;
+    return (
+      <div
+        title="jumpPrev"
+        className={`${prefixCls}-jump-prev`}
+        onClick={this.jumpPrev}
+      >
+        <button type="button" className={`${prefixCls}-item-link`}>
+          <Icon type="double-left" />
+          <span className={`${prefixCls}-item-ellipsis`}>•••</span>
+        </button>
+      </div>
+    );
+  };
+
+  renderJumpNext = (): React.ReactNode => {
+    const { prefixCls } = this.props;
+    return (
+      <div
+        title="jumpNext"
+        className={`${prefixCls}-jump-next`}
+        onClick={this.jumpNext}
+      >
+        <button type="button" className={`${prefixCls}-item-link`}>
+          <Icon type="double-right" />
+          <span className={`${prefixCls}-item-ellipsis`}>•••</span>
+        </button>
+      </div>
+    );
+  };
+
+  jumpPrev = () => {
+    this.prev(5);
+  };
+
+  jumpNext = () => {
+    this.next(5);
+  };
+
   getShowPageList = (): number[] => {
     const { current, pageTotal } = this.state;
     const pageList: number[] = [];
 
-    // eslint-disable-next-line no-plusplus
     for (let i = current - 2; i <= current + 2; i++) {
       if (i <= 0) {
         pageList.push(i + 5);
@@ -151,20 +193,16 @@ export default class Pagination extends React.Component<
     return Array.from(new Set(pageList));
   };
 
-  renderJumpPrev = (): React.ReactNode => {
-    const { prefixCls } = this.props;
+  renderOptions = (): React.ReactNode => {
+    const { prefixCls, pageSizeOptions } = this.props;
+    const { pageSize } = this.state;
     return (
-      <li title="jumpPrev" className={`${prefixCls}-jump-prev`}>
-        ...
-      </li>
-    );
-  };
-
-  renderJumpNext = (): React.ReactNode => {
-    const { prefixCls } = this.props;
-    return (
-      <li title="jumpNext" className={`${prefixCls}-jump-next`}>
-        ...
+      <li className={`${prefixCls}-options`}>
+        <Select value={pageSize}>
+          {pageSizeOptions?.map(item => (
+            <Option value={item}>{item}条/页</Option>
+          ))}
+        </Select>
       </li>
     );
   };
@@ -173,12 +211,12 @@ export default class Pagination extends React.Component<
     const { prefixCls, className, style } = this.props;
     const { pageTotal, current } = this.state;
     const showJump: boolean = pageTotal >= 10;
+    const showOption: boolean = pageTotal > 10;
     const classes = classNames(prefixCls, className);
     const hasPrev = this.hasPrev();
     const hasNext = this.hasNext();
     const pageList: React.ReactNode[] = [];
     if (!showJump) {
-      // eslint-disable-next-line no-plusplus
       for (let i = 0; i < pageTotal; i++) {
         const pageNum = i + 1;
         const pageClassName = classNames(
@@ -224,14 +262,14 @@ export default class Pagination extends React.Component<
         pageList.splice(1, 0, this.renderJumpPrev());
       }
       if (showJumpNext) {
-        pageList.splice(pageList.length - 1, 0, this.renderJumpPrev());
+        pageList.splice(pageList.length - 1, 0, this.renderJumpNext());
       }
     }
 
     return (
       <ul className={classes} style={style}>
         <li
-          onClick={this.prev}
+          onClick={() => this.prev()}
           className={classNames(`${prefixCls}-prev`, {
             [`${prefixCls}-disabled`]: !hasPrev,
           })}
@@ -240,13 +278,14 @@ export default class Pagination extends React.Component<
         </li>
         {pageList}
         <li
-          onClick={this.next}
+          onClick={() => this.next()}
           className={classNames(`${prefixCls}-next`, {
             [`${prefixCls}-disabled`]: !hasNext,
           })}
         >
           {this.renderNext()}
         </li>
+        {showOption && this.renderOptions()}
       </ul>
     );
   }
