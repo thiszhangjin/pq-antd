@@ -2,6 +2,10 @@
 
 @pagination: ~'@{prefix}-pagination';
 .@{pagination} {
+  & > li {
+    display: inline-block;
+  }
+
   &-item,
   &-prev,
   &-next,
@@ -72,6 +76,13 @@
     width: 100px;
     .ant-select {
       width: 100%;
+    }
+  }
+
+  &-jumper {
+    .ant-input {
+      width: 60px;
+      margin: 0 5px;
     }
   }
 

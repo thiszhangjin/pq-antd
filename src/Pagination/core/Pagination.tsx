@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Icon, Select } from 'antd';
+import { Icon, Select, Input } from 'antd';
 
 const { Option } = Select;
 
@@ -69,7 +69,8 @@ export default class Pagination extends React.Component<
     props: PaginationProps,
     state: PaginationState,
   ) {
-    const pageSize: number = props.pageSize || props.defaultPageSize || 10;
+    const pageSize: number =
+      props.pageSize || state.pageSize || props.defaultPageSize || 0;
     const pageTotal: number = props.total
       ? Math.ceil(props.total / pageSize)
       : 0;
@@ -94,6 +95,12 @@ export default class Pagination extends React.Component<
   }
 
   changeCurrent = (current: number) => {
+    const { pageTotal } = this.state;
+    if (current > pageTotal) {
+      current = pageTotal;
+    } else if (current <= 0) {
+      current = 1;
+    }
     this.setState({
       current,
     });
@@ -184,6 +191,8 @@ export default class Pagination extends React.Component<
     for (let i = current - 2; i <= current + 2; i++) {
       if (i <= 0) {
         pageList.push(i + 5);
+      } else if (i > pageTotal) {
+        pageList.push(i - 5);
       } else {
         pageList.push(i);
       }
@@ -193,12 +202,27 @@ export default class Pagination extends React.Component<
     return Array.from(new Set(pageList));
   };
 
-  renderOptions = (): React.ReactNode => {
+  onShowSizeChange = (value: number) => {
+    const { onShowSizeChange } = this.props;
+    const { current } = this.state;
+    this.setState(
+      {
+        pageSize: value,
+      },
+      () => {
+        if (onShowSizeChange) {
+          onShowSizeChange(current, value);
+        }
+      },
+    );
+  };
+
+  renderSizeChanger = (): React.ReactNode => {
     const { prefixCls, pageSizeOptions } = this.props;
     const { pageSize } = this.state;
     return (
       <li className={`${prefixCls}-options`}>
-        <Select value={pageSize}>
+        <Select value={pageSize} onChange={this.onShowSizeChange}>
           {pageSizeOptions?.map(item => (
             <Option value={item}>{item}条/页</Option>
           ))}
@@ -207,11 +231,33 @@ export default class Pagination extends React.Component<
     );
   };
 
+  handleQuickJumper = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const value = Number(e.target.value);
+    if (typeof value === 'number' && !isNaN(value)) {
+      this.changeCurrent(value);
+    }
+  };
+
+  renderQuickJumper = (): React.ReactNode => {
+    const { prefixCls } = this.props;
+    return (
+      <li className={`${prefixCls}-jumper`}>
+        跳至
+        <Input onPressEnter={this.handleQuickJumper} />页
+      </li>
+    );
+  };
+
   render() {
-    const { prefixCls, className, style } = this.props;
+    const {
+      prefixCls,
+      className,
+      showSizeChanger,
+      showQuickJumper,
+      style,
+    } = this.props;
     const { pageTotal, current } = this.state;
     const showJump: boolean = pageTotal >= 10;
-    const showOption: boolean = pageTotal > 10;
     const classes = classNames(prefixCls, className);
     const hasPrev = this.hasPrev();
     const hasNext = this.hasNext();
@@ -285,7 +331,8 @@ export default class Pagination extends React.Component<
         >
           {this.renderNext()}
         </li>
-        {showOption && this.renderOptions()}
+        {showSizeChanger && this.renderSizeChanger()}
+        {showQuickJumper && this.renderQuickJumper()}
       </ul>
     );
   }
