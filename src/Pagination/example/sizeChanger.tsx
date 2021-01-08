@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pagination } from '../../index';
+import { Pagination } from 'pq-antd';
 
 class App extends React.Component {
   state = {};
