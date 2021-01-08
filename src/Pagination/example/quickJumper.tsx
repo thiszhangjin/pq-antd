@@ -2,16 +2,36 @@ import React from 'react';
 import { Pagination } from '../../index';
 
 class App extends React.Component {
-  state = {};
+  state = {
+    current: 5,
+  };
+
+  handleChange = page => {
+    this.setState({
+      current: page,
+    });
+  };
 
   render() {
     return (
-      <Pagination
-        defaultCurrent={1}
-        total={200}
-        defaultPageSize={20}
-        showQuickJumper
-      />
+      <div>
+        <Pagination
+          current={this.state.current}
+          onChange={this.handleChange}
+          defaultCurrent={1}
+          total={200}
+          defaultPageSize={10}
+          showQuickJumper
+        />
+        <Pagination
+          current={this.state.current}
+          defaultCurrent={1}
+          total={200}
+          defaultPageSize={10}
+          showQuickJumper
+          disabled
+        />
+      </div>
     );
   }
 }

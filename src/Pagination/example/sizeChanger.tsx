@@ -4,7 +4,7 @@ import { Pagination } from '../../index';
 class App extends React.Component {
   state = {};
 
-  onShowSizeChange = (current: number, size: number) => {
+  onSizeChange = (current: number, size: number) => {
     console.log(current, size);
   };
 
@@ -14,7 +14,8 @@ class App extends React.Component {
         defaultCurrent={1}
         total={200}
         defaultPageSize={20}
-        onShowSizeChange={this.onShowSizeChange}
+        onShowSizeChange={this.onSizeChange}
+        onChange={this.onSizeChange}
         showSizeChanger
       />
     );

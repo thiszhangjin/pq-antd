@@ -1,4 +1,4 @@
-import Pagination from './core/Pagination';
+import Pagination from './Pagination';
 import './style/index.less';
 
 export default Pagination;

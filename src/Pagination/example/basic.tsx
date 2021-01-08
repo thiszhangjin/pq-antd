@@ -5,7 +5,7 @@ class App extends React.Component {
   state = {};
 
   render() {
-    return <Pagination defaultCurrent={1} total={200} />;
+    return <Pagination total={200} />;
   }
 }
 
