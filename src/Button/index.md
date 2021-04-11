@@ -87,6 +87,16 @@ export default () => (
         <Icon type="right" />
       </Button>
     </Button.Group>
+
+    <Button.Group>
+      <Button>Backward</Button>
+      <Button>Forward</Button>
+    </Button.Group>
+
+    <Button.Group>
+      <Button disabled>Backward</Button>
+      <Button disabled>Forward</Button>
+    </Button.Group>
   </div>
 );
 ```
