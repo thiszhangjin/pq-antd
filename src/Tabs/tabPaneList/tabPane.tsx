@@ -12,6 +12,7 @@ export interface TabPaneProps {
   forceRender?: boolean;
   tab?: string | React.ReactNode;
   disabled?: boolean;
+  closable?: boolean;
 }
 
 export default function TabPane({
@@ -42,3 +43,7 @@ export default function TabPane({
     </div>
   );
 }
+
+TabPane.defaultProps = {
+  closable: true,
+};

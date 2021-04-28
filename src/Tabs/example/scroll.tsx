@@ -1,7 +1,8 @@
 import React from 'react';
 import { Select } from 'antd';
-import { Tabs } from '../../index';
-import { TabPane } from '../index';
+import { Tabs } from 'pq-antd';
+
+const { TabPane } = Tabs;
 
 const { Option } = Select;
 
@@ -19,6 +20,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
+        Tab position：
         <Select
           defaultValue="top"
           style={{ width: 80, marginBottom: 10 }}

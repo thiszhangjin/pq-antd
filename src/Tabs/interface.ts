@@ -16,6 +16,8 @@ export type TabOffsetMap = Map<React.Key, TabOffset>;
 
 export type TabPosition = 'left' | 'right' | 'top' | 'bottom';
 
+export type TabType = 'line' | 'card' | 'editable-card';
+
 export interface Tab extends TabPaneProps {
   key: string;
   tab: string | React.ReactElement;
@@ -24,7 +26,7 @@ export interface Tab extends TabPaneProps {
 
 export type RenderTabBar = (
   props: any,
-  DefaultTabBar: React.ComponentType,
+  DefaultTabBar: any,
 ) => React.ReactElement;
 
 export interface AnimatedConfig {

@@ -1,12 +1,15 @@
 @import '../../style/default.less';
 
 @tabs: ~'@{prefix}-tabs';
+@tabs-card-height: 40px;
+@tabs-card-border-color: #e8e8e8;
 
 .@{tabs} {
   display: flex;
   flex-direction: column;
   position: relative;
   &-bar {
+    box-sizing: border-box;
     border: none;
     margin: 0;
     .@{tabs}-nav {
@@ -18,6 +21,8 @@
       &-wrapper {
         position: relative;
         flex: 1;
+        display: flex;
+        align-items: center;
         overflow: hidden;
       }
 
@@ -38,6 +43,7 @@
       }
 
       .@{tabs}-nodes {
+        flex: 1;
         position: relative;
         transition: margin 0.3s;
         &-content {
@@ -71,6 +77,24 @@
           .anticon {
             margin-right: 8px;
           }
+        }
+      }
+      .@{tabs}-new-tab {
+        position: relative;
+        width: 20px;
+        height: 20px;
+        color: rgba(0, 0, 0, 0.65);
+        font-size: 12px;
+        line-height: 20px;
+        text-align: center;
+        border: 1px solid @tabs-card-border-color;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: all 0.3s;
+
+        &:hover {
+          color: @color-primary;
+          border-color: @color-primary;
         }
       }
     }
@@ -168,5 +192,44 @@
   .@{tabs}-ink-bar {
     left: 0;
     width: 2px;
+  }
+}
+
+.@{tabs}-card,
+.@{tabs}-editable-card {
+  .@{tabs}-bar {
+    height: @tabs-card-height;
+    .@{tabs}-nav {
+      height: @tabs-card-height;
+      .@{tabs}-nodes {
+        .@{tabs}-node {
+          height: @tabs-card-height;
+          margin-right: 2px;
+          padding: 0 16px;
+          background: #fafafa;
+          border: 1px solid @tabs-card-border-color;
+          border-radius: 4px 4px 0 0;
+
+          &-active {
+            background: #fff;
+            border-color: @tabs-card-border-color;
+            border-bottom: 1px solid #fff;
+          }
+
+          & + .@{tabs}-node {
+            margin-left: 0px;
+          }
+
+          .anticon-close {
+            margin: 0 0 0 5px;
+            color: @color-secondary;
+
+            &:hover {
+              color: #000;
+            }
+          }
+        }
+      }
+    }
   }
 }

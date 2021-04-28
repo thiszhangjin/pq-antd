@@ -10,6 +10,7 @@ export interface TabNodeProps {
   active?: boolean;
   tabKey?: string;
   disabled?: boolean;
+  nodeWrapper?: (node: any) => React.ReactElement;
 
   onClick?: (
     activeKey: string,
@@ -26,6 +27,7 @@ function TabNode(
     active,
     tabKey,
     disabled,
+    nodeWrapper,
     children,
     onClick,
   }: TabNodeProps,
@@ -40,7 +42,7 @@ function TabNode(
     className,
   );
 
-  return (
+  let node = (
     <div
       id={id && `${id}-tabNode-${tabKey}`}
       className={classes}
@@ -51,6 +53,12 @@ function TabNode(
       {children}
     </div>
   );
+
+  if (nodeWrapper) {
+    node = nodeWrapper(node);
+  }
+
+  return node;
 }
 
 export default React.forwardRef(TabNode);

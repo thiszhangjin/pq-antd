@@ -10,33 +10,40 @@ import { Icon } from 'antd';
 import classNames from 'classnames';
 import TabContext from '../tabContext';
 import TabNode from './tabNode';
-import { TabPosition, TabBarExtraContent } from '../interface';
+import { TabPosition, TabBarExtraContent, TabType } from '../interface';
 
 export interface TabNavListProps {
-  children?: React.ReactNode;
   id?: string | undefined;
+  children?: (node: any) => React.ReactElement;
   activeKey?: string | undefined;
   tabBarExtraContent?: TabBarExtraContent;
   tabBarGutter?: number;
   tabBarStyle?: React.CSSProperties;
   tabPosition?: TabPosition;
+  type?: TabType;
+  hideAdd?: boolean;
   isTabHorizontal?: boolean;
 
   onTabClick?: (
     activeKey: string,
     e: React.KeyboardEvent | React.MouseEvent,
   ) => void;
+  onEdit?: (targetKey: string, action: string) => void;
 }
 
 export default function TabNavList({
   id,
   activeKey,
   tabPosition,
+  type,
+  hideAdd,
   isTabHorizontal,
   tabBarGutter,
   tabBarStyle,
+  children,
   // tabBarExtraContent,
   onTabClick,
+  onEdit,
 }: TabNavListProps) {
   const { tabs, prefixCls } = useContext(TabContext);
   const [inkStyle, setInkStyle] = useState<React.CSSProperties>();
@@ -49,7 +56,7 @@ export default function TabNavList({
   const tabNodesCache = useRef(new Map<React.Key, React.RefObject<any>>());
 
   const handleSetInkStyle = useCallback((): void => {
-    if (activeKey) {
+    if (activeKey && type === 'line') {
       const activeNode = tabNodesCache.current.get(activeKey);
       if (activeNode) {
         if (isTabHorizontal) {
@@ -65,7 +72,7 @@ export default function TabNavList({
         }
       }
     }
-  }, [activeKey, isTabHorizontal]);
+  }, [activeKey, isTabHorizontal, type]);
 
   useEffect(() => {
     if (tabNodes.current && tabWrapper.current) {
@@ -149,6 +156,19 @@ export default function TabNavList({
     handleSetInkStyle();
   }
 
+  function onRemove(event: React.MouseEvent, targetKey: string) {
+    event.stopPropagation();
+    if (onEdit) {
+      onEdit(targetKey, 'remove');
+    }
+  }
+
+  function onAdd() {
+    if (onEdit) {
+      onEdit('', 'add');
+    }
+  }
+
   const classes = classNames(
     `${prefixCls}-bar`,
     `${prefixCls}-${tabPosition}-bar`,
@@ -195,19 +215,35 @@ export default function TabNavList({
                     key={item.key}
                     disabled={item.disabled}
                     onClick={onTabClick}
+                    nodeWrapper={children}
                     ref={getTabNodeRef(item.key)}
                     style={tabBarGutter ? { marginRight: tabBarGutter } : {}}
                   >
                     {item.tab}
+                    {type === 'editable-card' && item.closable && (
+                      <Icon
+                        type="close"
+                        onClick={event => onRemove(event, item.key)}
+                      />
+                    )}
                   </TabNode>
                 </ResizeObserver>
               ))}
             </div>
-            <div
-              className={classNames(`${prefixCls}-ink-bar`)}
-              style={inkStyle}
-            />
+            {type === 'line' && (
+              <div
+                className={classNames(`${prefixCls}-ink-bar`)}
+                style={inkStyle}
+              />
+            )}
           </div>
+          {type === 'editable-card' && !hideAdd && (
+            <Icon
+              type="plus"
+              className={`${prefixCls}-new-tab`}
+              onClick={onAdd}
+            />
+          )}
         </div>
         {scrolling && (
           <div className={nextClasses} onClick={() => handleScroll(true)}>

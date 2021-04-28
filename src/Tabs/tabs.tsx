@@ -11,6 +11,7 @@ import {
   OnTabScroll,
   TabBarExtraContent,
   Tab,
+  TabType,
 } from './interface';
 
 export interface TabsProps {
@@ -28,6 +29,8 @@ export interface TabsProps {
   tabBarGutter?: number;
   tabBarStyle?: React.CSSProperties;
   tabPosition?: TabPosition;
+  type?: TabType;
+  hideAdd?: boolean;
 
   onChange?: (activeKey: string) => void;
   onTabClick?: (
@@ -35,6 +38,7 @@ export interface TabsProps {
     e: React.KeyboardEvent | React.MouseEvent,
   ) => void;
   onTabScroll?: OnTabScroll;
+  onEdit?: (targetKey: string, action: string) => void;
 }
 
 function getTabList(children: React.ReactNode): Tab[] {
@@ -60,6 +64,8 @@ function Tabs(
     style,
     activeKey,
     defaultActiveKey,
+    type = 'line',
+    hideAdd = false,
     tabPosition = 'top',
     tabBarGutter,
     tabBarStyle,
@@ -68,6 +74,7 @@ function Tabs(
     onChange,
     onTabClick,
     onTabScroll,
+    onEdit,
     ...restProps
   }: TabsProps,
   ref: React.Ref<HTMLDivElement>,
@@ -116,6 +123,7 @@ function Tabs(
     prefixCls,
     {
       [`${prefixCls}-${tabPosition}`]: tabPosition,
+      [`${prefixCls}-${type}`]: type,
     },
     className,
   );
@@ -128,12 +136,15 @@ function Tabs(
   };
 
   const tabNavBarProps = {
+    type,
+    hideAdd,
     tabPosition,
     tabBarGutter,
     tabBarStyle,
     tabBarExtraContent,
     onTabClick: onInTabClick,
     onTabScroll,
+    onEdit,
     ...baseProps,
   };
 
