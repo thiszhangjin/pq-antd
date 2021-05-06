@@ -111,31 +111,13 @@ export default function TabNavList({
   useEffect(() => {
     const { marginLeft, marginTop } = tabNodesStyle;
     if (typeof marginLeft === 'number') {
-      if (marginLeft >= 0) {
-        setPrevBtnDisabled(true);
-      } else {
-        setPrevBtnDisabled(false);
-      }
-
-      if (marginLeft <= tabWrapperWidth - tabNodesWidth) {
-        setNextBtnDisabled(true);
-      } else {
-        setNextBtnDisabled(false);
-      }
+      setPrevBtnDisabled(marginLeft >= 0);
+      setNextBtnDisabled(marginLeft <= tabWrapperWidth - tabNodesWidth);
     }
 
     if (typeof marginTop === 'number') {
-      if (marginTop >= 0) {
-        setPrevBtnDisabled(true);
-      } else {
-        setPrevBtnDisabled(false);
-      }
-
-      if (marginTop <= tabWrapperHeight - tabNodesHeight) {
-        setNextBtnDisabled(true);
-      } else {
-        setNextBtnDisabled(false);
-      }
+      setPrevBtnDisabled(marginTop >= 0);
+      setNextBtnDisabled(marginTop <= tabWrapperHeight - tabNodesHeight);
     }
   }, [tabNodesStyle, tabs.map(tab => tab.key).join('_'), isTabHorizontal]);
 
@@ -197,6 +179,42 @@ export default function TabNavList({
     }
   }
 
+  function getPrevBtn(): React.ReactElement | null {
+    const prevClasses = classNames(
+      `${prefixCls}-nav-btn`,
+      `${prefixCls}-nav-prev`,
+      {
+        [`${prefixCls}-nav-btn-disabled`]: prevBtnDisabled,
+      },
+    );
+    if (scrolling) {
+      return (
+        <div className={prevClasses} onClick={() => handleScroll(false)}>
+          <Icon type={isTabHorizontal ? 'left' : 'up'} />
+        </div>
+      );
+    }
+    return null;
+  }
+
+  function getNextBtn(): React.ReactElement | null {
+    const nextClasses = classNames(
+      `${prefixCls}-nav-btn`,
+      `${prefixCls}-nav-next`,
+      {
+        [`${prefixCls}-nav-btn-disabled`]: nextBtnDisabled,
+      },
+    );
+    if (scrolling) {
+      return (
+        <div className={nextClasses} onClick={() => handleScroll(true)}>
+          <Icon type={isTabHorizontal ? 'right' : 'down'} />
+        </div>
+      );
+    }
+    return null;
+  }
+
   const classes = classNames(
     `${prefixCls}-bar`,
     `${prefixCls}-${tabPosition}-bar`,
@@ -204,28 +222,10 @@ export default function TabNavList({
   const wrapperClasses = classNames(`${prefixCls}-nav-wrapper`, {
     [`${prefixCls}-nav-scrolling`]: scrolling,
   });
-  const prevClasses = classNames(
-    `${prefixCls}-nav-btn`,
-    `${prefixCls}-nav-prev`,
-    {
-      [`${prefixCls}-nav-btn-disabled`]: prevBtnDisabled,
-    },
-  );
-  const nextClasses = classNames(
-    `${prefixCls}-nav-btn`,
-    `${prefixCls}-nav-next`,
-    {
-      [`${prefixCls}-nav-btn-disabled`]: nextBtnDisabled,
-    },
-  );
   return (
     <div className={classes} style={tabBarStyle}>
       <div className={`${prefixCls}-nav`}>
-        {scrolling && (
-          <div className={prevClasses} onClick={() => handleScroll(false)}>
-            <Icon type={isTabHorizontal ? 'left' : 'up'} />
-          </div>
-        )}
+        {getPrevBtn()}
         <div className={wrapperClasses} ref={tabWrapper}>
           <div className={`${prefixCls}-nodes`} style={tabNodesStyle}>
             <div className={`${prefixCls}-nodes-content`} ref={tabNodes}>
@@ -266,11 +266,7 @@ export default function TabNavList({
             )}
           </div>
         </div>
-        {scrolling && (
-          <div className={nextClasses} onClick={() => handleScroll(true)}>
-            <Icon type={isTabHorizontal ? 'right' : 'down'} />
-          </div>
-        )}
+        {getNextBtn()}
       </div>
       {type === 'editable-card' && !hideAdd && (
         <Icon type="plus" className={`${prefixCls}-new-tab`} onClick={onAdd} />
