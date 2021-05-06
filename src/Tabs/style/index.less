@@ -12,11 +12,15 @@
     box-sizing: border-box;
     border: none;
     margin: 0;
+    display: flex;
+    align-items: center;
     .@{tabs}-nav {
       height: 100%;
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
 
       &-wrapper {
         position: relative;
@@ -43,7 +47,6 @@
       }
 
       .@{tabs}-nodes {
-        flex: 1;
         position: relative;
         transition: margin 0.3s;
         &-content {
@@ -79,23 +82,23 @@
           }
         }
       }
-      .@{tabs}-new-tab {
-        position: relative;
-        width: 20px;
-        height: 20px;
-        color: rgba(0, 0, 0, 0.65);
-        font-size: 12px;
-        line-height: 20px;
-        text-align: center;
-        border: 1px solid @tabs-card-border-color;
-        border-radius: 2px;
-        cursor: pointer;
-        transition: all 0.3s;
+    }
+    .@{tabs}-new-tab {
+      position: relative;
+      width: 20px;
+      height: 20px;
+      color: rgba(0, 0, 0, 0.65);
+      font-size: 12px;
+      line-height: 20px;
+      text-align: center;
+      border: 1px solid @tabs-card-border-color;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
 
-        &:hover {
-          color: @color-primary;
-          border-color: @color-primary;
-        }
+      &:hover {
+        color: @color-primary;
+        border-color: @color-primary;
       }
     }
   }
@@ -151,6 +154,7 @@
   .@{tabs}-bar {
     border-right: 1px solid @color-border-light;
     margin-right: 12px;
+    flex-direction: column;
 
     .@{tabs}-nav {
       flex-direction: column;

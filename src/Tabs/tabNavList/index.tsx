@@ -265,13 +265,6 @@ export default function TabNavList({
               />
             )}
           </div>
-          {type === 'editable-card' && !hideAdd && (
-            <Icon
-              type="plus"
-              className={`${prefixCls}-new-tab`}
-              onClick={onAdd}
-            />
-          )}
         </div>
         {scrolling && (
           <div className={nextClasses} onClick={() => handleScroll(true)}>
@@ -279,6 +272,9 @@ export default function TabNavList({
           </div>
         )}
       </div>
+      {type === 'editable-card' && !hideAdd && (
+        <Icon type="plus" className={`${prefixCls}-new-tab`} onClick={onAdd} />
+      )}
     </div>
   );
 }
