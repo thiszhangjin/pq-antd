@@ -7,3 +7,4 @@ export { default as Progress } from './Progress';
 export { default as Menu } from './Menu';
 export { default as Pagination } from './Pagination';
 export { default as Tabs } from './Tabs';
+export { default as Card } from './Card';
