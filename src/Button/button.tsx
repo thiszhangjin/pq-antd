@@ -63,7 +63,7 @@ export default class Button extends React.Component<IProps, IState> {
       {
         [`${prefixCls}-${type}`]: type,
         [`${prefixCls}-${shape}`]: shape,
-        [`${prefixCls}-only-icon`]: icon && !children,
+        [`${prefixCls}-only-icon`]: icon && !React.isValidElement(children),
         [`${prefixCls}-loading`]: !!loading,
       },
       className,

@@ -1,7 +1,9 @@
-import tabs from './tabs';
+import React from 'react';
+import Tabs, { TabsProps } from './Tabs';
 import TabPane from './tabPaneList/tabPane';
 import './style/index.less';
 
-tabs.TabPane = TabPane;
-
-export default tabs;
+export default function RefTabs(props: TabsProps) {
+  return <Tabs {...props} />;
+}
+RefTabs.TabPane = TabPane;

@@ -1,0 +1,17 @@
+@import '../../style/default.less';
+
+@input: ~'@{prefix}-input';
+@search: ~'@{prefix}-search';
+
+.@{search} {
+  .@{input}-addon-after {
+    padding: 0;
+    .pq-antd-button {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      border: none;
+      border-radius: 0;
+    }
+  }
+}
